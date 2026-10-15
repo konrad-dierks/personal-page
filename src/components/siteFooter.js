@@ -39,7 +39,7 @@ const SiteFooter = ({ usesTurnoutFavicon = false }) => (
     <p>
       Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>
     <br></br>
-      I acknowledge funding from the French National Research Agency under the EUR grant ANR-18-EURE-0021.
+      I acknowledge funding from the French National Research Agency under the EUR grant ANR-18-EURE-0021 and the project AVINEQ.
     </p>
   </footer>
 )
