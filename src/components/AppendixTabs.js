@@ -101,8 +101,8 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
             universalization ethics justify participation in large elections?,
             TSE Working Paper, n. 21-1193, February 2021, revised May 2026.
             <span className="reference-link-line">
-              <a href="https://www.tse-fr.eu/publications/does-universalization-ethics-justify-participation-large-elections-0">
-                https://www.tse-fr.eu/publications/does-universalization-ethics-justify-participation-large-elections-0
+              <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0">
+                https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0
               </a>
             </span>
           </p>
