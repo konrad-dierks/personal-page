@@ -47,7 +47,7 @@ const ResearchPage = () => (
             GitHub repository
           </a>{" "}
           ·{" "}
-          <a href="https://www.tse-fr.eu/publications/does-universalization-ethics-justify-participation-large-elections-0">
+          <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0">
             TSE working paper (2026)
           </a>
           <br />
