@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "gatsby"
 
 import SiteLayout from "../components/siteLayout"
 import Seo from "../components/seo"
@@ -14,7 +15,11 @@ const ResearchPage = () => (
     </section>
     <section className="research-list">
       <article className="research-item">
-        <h2>Is a 100% renewable electricity mix cost-efficient under weather uncertainty?</h2>
+        <h2>
+          <Link to="/job-market-paper/">
+            Is a 100% renewable electricity mix cost-efficient under weather uncertainty?
+          </Link>
+        </h2>
         <h3><i>Job Market Paper</i></h3>
         <JobMarketPaperAbstract />
         <p>
@@ -31,7 +36,11 @@ const ResearchPage = () => (
         </p>
       </article>
       <article className="research-item">
-        <h2>Does universalization ethics justify participation in large elections?</h2>
+        <h2>
+          <Link to="/turnout-paper/">
+            Does universalization ethics justify participation in large elections?
+          </Link>
+        </h2>
         <h3>
           With Ingela Alger and Jean-François Laslier
           <br />

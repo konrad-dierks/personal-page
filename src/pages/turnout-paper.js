@@ -8,7 +8,7 @@ const TURNOUT_FAVICON_LIGHT = "/favicon-turnout-light-v2.svg"
 const TURNOUT_FAVICON_DARK = "/favicon-turnout-dark-v2.svg"
 
 const AppendixPage = () => (
-  <SiteLayout usesTurnoutFavicon={true}>
+  <SiteLayout pageIcon="turnout">
     <header className="appendix-header">
       <h1>Does universalization ethics justify participation in large elections?</h1>
       <h2 className="appendix-subtitle">Bonus content</h2>

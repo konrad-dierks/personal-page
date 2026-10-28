@@ -12,8 +12,8 @@ function Seo({
   description,
   title,
   children,
-  faviconLight = "/favicon-light-v2.svg",
-  faviconDark = "/favicon-dark-v2.svg",
+  faviconLight = "/favicon-light-v5.svg",
+  faviconDark = "/favicon-dark-v5.svg",
 }) {
   const { site } = useStaticQuery(graphql`
     query {

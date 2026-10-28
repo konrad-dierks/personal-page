@@ -2,13 +2,13 @@ import * as React from "react"
 import SiteNav from "./siteNav"
 import SiteFooter from "./siteFooter"
 
-const SiteLayout = ({ children, usesTurnoutFavicon = false }) => {
+const SiteLayout = ({ children, pageIcon = null }) => {
   return (
     <>
       <SiteNav />
       <div className="site-shell">
         <main>{children}</main>
-        <SiteFooter usesTurnoutFavicon={usesTurnoutFavicon} />
+        <SiteFooter pageIcon={pageIcon} />
       </div>
     </>
   )

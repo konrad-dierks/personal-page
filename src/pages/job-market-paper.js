@@ -6,8 +6,11 @@ import SiteLayout from "../components/siteLayout"
 import Seo from "../components/seo"
 import { JobMarketPaperAbstract } from "../components/abstracts"
 
+const JMP_FAVICON_LIGHT = "/favicon-jmp-light-v4.svg"
+const JMP_FAVICON_DARK = "/favicon-jmp-dark-v4.svg"
+
 const JobMarketPaperPage = () => (
-  <SiteLayout>
+  <SiteLayout pageIcon="jmp">
     <header className="appendix-header">
       <h1>Is a 100% renewable electricity mix cost-efficient under weather uncertainty?</h1>
       <h2 className="appendix-subtitle">Job Market Paper</h2>
@@ -25,6 +28,12 @@ const JobMarketPaperPage = () => (
   </SiteLayout>
 )
 
-export const Head = () => <Seo title="Job Market Paper" />
+export const Head = () => (
+  <Seo
+    title="Job Market Paper"
+    faviconLight={JMP_FAVICON_LIGHT}
+    faviconDark={JMP_FAVICON_DARK}
+  />
+)
 
 export default JobMarketPaperPage

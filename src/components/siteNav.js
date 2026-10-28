@@ -6,7 +6,7 @@ import { MoonIcon, SunIcon } from "@sanity/icons"
 const NAV_FIT_EPSILON = 1
 const SIDE_NAV_ENTER_BUFFER_PX = 8
 const SIDE_NAV_EXIT_BUFFER_PX = 8
-// Listed under Research in the side nav only
+// Always expanded in the side nav; a click-to-open dropdown in the top bar
 const RESEARCH_SUBPAGES = [
   { to: "/job-market-paper/", label: "Job Market Paper" },
   { to: "/turnout-paper/", label: "Turnout Paper" },
@@ -15,6 +15,7 @@ const RESEARCH_SUBPAGES = [
 const SiteNav = () => {
   const location = useLocation()
   const navRef = React.useRef(null)
+  const researchItemRef = React.useRef(null)
   const brandMeasureRef = React.useRef(null)
   const themeMeasureRef = React.useRef(null)
   const cvMeasureRef = React.useRef(null)
@@ -25,6 +26,7 @@ const SiteNav = () => {
     typeof window === "undefined" ? false : window.innerHeight > window.innerWidth,
   )
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const [researchOpen, setResearchOpen] = React.useState(false)
   const [isAtTop, setIsAtTop] = React.useState(true)
   const [themeOverride, setThemeOverride] = React.useState(() => {
     if (typeof window === "undefined") {
@@ -40,9 +42,10 @@ const SiteNav = () => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
   })
   const pathname = location?.pathname || ""
-  const isResearchSectionActive = RESEARCH_SUBPAGES.some(
-    ({ to }) => pathname === to || pathname === to.replace(/\/$/, ""),
-  )
+  const isResearchSectionActive = [
+    { to: "/research/" },
+    ...RESEARCH_SUBPAGES,
+  ].some(({ to }) => pathname === to || pathname === to.replace(/\/$/, ""))
 
   const updateNavLayout = React.useCallback(() => {
     if (typeof window === "undefined") {
@@ -212,6 +215,7 @@ const SiteNav = () => {
       setIsAtTop(atTop)
       if (isPortrait && !atTop) {
         setMenuOpen(false)
+        setResearchOpen(false)
       }
     }
 
@@ -219,6 +223,41 @@ const SiteNav = () => {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [isPortrait])
+
+  React.useEffect(() => {
+    setResearchOpen(false)
+  }, [isHorizontal, useSideNav, menuOpen])
+
+  React.useEffect(() => {
+    if (typeof window === "undefined" || !researchOpen) {
+      return undefined
+    }
+
+    const handlePointerDown = event => {
+      if (
+        researchItemRef.current &&
+        !researchItemRef.current.contains(event.target)
+      ) {
+        setResearchOpen(false)
+      }
+    }
+
+    const handleKeyDown = event => {
+      if (event.key === "Escape") {
+        setResearchOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown)
+    document.addEventListener("touchstart", handlePointerDown)
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown)
+      document.removeEventListener("touchstart", handlePointerDown)
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [researchOpen])
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -277,7 +316,12 @@ const SiteNav = () => {
 
   const handleNavItemSelect = () => {
     setMenuOpen(false)
+    setResearchOpen(false)
   }
+
+  const researchMenuId = isHorizontal
+    ? "site-nav-research-menu-horizontal"
+    : "site-nav-research-menu-vertical"
 
   const navItems = (
     <>
@@ -290,17 +334,45 @@ const SiteNav = () => {
           CV
         </Link>
       </li>
-      <li className="nav-item nav-item--page">
-        <Link
-          to="/research"
-          className={
-            isResearchSectionActive ? "site-nav-link--active" : undefined
-          }
-          activeClassName="site-nav-link--active"
-          onClick={handleNavItemSelect}
+      <li
+        className="nav-item nav-item--page nav-item--dropdown"
+        ref={researchItemRef}
+      >
+        <button
+          className={`site-nav-dropdown-toggle${
+            isResearchSectionActive ? " site-nav-link--active" : ""
+          }`}
+          type="button"
+          onClick={() => setResearchOpen(open => !open)}
+          aria-expanded={researchOpen}
+          aria-controls={researchMenuId}
         >
-          Research
-        </Link>
+          <span className="site-nav-dropdown-label">Research</span>
+        </button>
+        {researchOpen ? (
+          <ul
+            id={researchMenuId}
+            className={`site-nav-dropdown${
+              isHorizontal
+                ? " site-nav-dropdown--horizontal"
+                : " site-nav-dropdown--vertical"
+            }`}
+          >
+            {[{ to: "/research", label: "Overview" }, ...RESEARCH_SUBPAGES].map(
+              ({ to, label }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    activeClassName="site-nav-link--active"
+                    onClick={handleNavItemSelect}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ),
+            )}
+          </ul>
+        ) : null}
       </li>
     </>
   )
@@ -337,9 +409,9 @@ const SiteNav = () => {
         </a>
       </li>
       <li className="nav-item nav-item--page" ref={researchMeasureRef}>
-        <a href="/research/" tabIndex={-1}>
+        <span className="site-nav-dropdown-toggle" aria-hidden="true">
           Research
-        </a>
+        </span>
       </li>
     </ul>
   )

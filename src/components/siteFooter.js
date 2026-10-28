@@ -1,7 +1,7 @@
 import * as React from "react"
 import { GithubIcon } from "@sanity/icons"
 
-const SiteFooter = ({ usesTurnoutFavicon = false }) => (
+const SiteFooter = ({ pageIcon = null }) => (
   <footer className="site-footer">
     <p>
       © {new Date().getFullYear()} Konrad Dierks &middot; Hosted on GitHub Pages
@@ -16,7 +16,7 @@ const SiteFooter = ({ usesTurnoutFavicon = false }) => (
         </a>
       </span>
       <br></br>
-      {usesTurnoutFavicon ? (
+      {pageIcon === "turnout" ? (
         <>
           The webpage icon "
           <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
@@ -31,6 +31,24 @@ const SiteFooter = ({ usesTurnoutFavicon = false }) => (
           </a>
           . Modified for greater line width. On dark browser theme: further modified
           for color inversion.
+          <br></br>
+        </>
+      ) : null}
+      {pageIcon === "jmp" ? (
+        <>
+          The webpage icon "
+          <a href="https://tabler.io/icons?icon=building-wind-turbine">
+            building-wind-turbine
+          </a>
+          " from Tabler Icons by Paweł Kuna is licensed under the{" "}
+          <a
+            rel="noopener noreferrer"
+            href="https://github.com/tabler/tabler-icons/blob/main/LICENSE"
+          >
+            MIT License
+          </a>
+          . Modified for reduced line width. On dark browser theme: further
+          modified for color inversion.
           <br></br>
         </>
       ) : null}
