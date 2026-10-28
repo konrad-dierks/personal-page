@@ -2,7 +2,6 @@ import * as React from "react"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { MoonIcon, SunIcon } from "@sanity/icons"
-import "./layout.css"
 
 const NAV_FIT_EPSILON = 1
 const SIDE_NAV_ENTER_BUFFER_PX = 8

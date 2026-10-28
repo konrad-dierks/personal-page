@@ -36,6 +36,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Files kept out of git (photo, JMP, CV) are attached to the "assets" release
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download assets --repo "${{ github.repository }}" --dir static --clobber
       - name: Detect package manager
         id: detect-package-manager
         run: |

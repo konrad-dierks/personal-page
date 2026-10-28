@@ -1,4 +1,5 @@
 import * as React from "react"
+import { withPrefix } from "gatsby"
 
 import SiteLayout from "../components/siteLayout"
 import Seo from "../components/seo"
@@ -23,9 +24,16 @@ const IndexPage = () => (
           My <a href="/research">main project</a> and upcoming job market paper is about the cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
         </p>
       </div>
-      <div className="home-photo" role="img" aria-label="Portrait placeholder">
-        Photo coming soon
-      </div>
+      <figure className="home-figure">
+        <img
+          className="home-photo"
+          src={withPrefix("/photo_cropped.webp")}
+          alt="Portrait of Konrad Dierks"
+          width="800"
+          height="1066"
+        />
+        <figcaption className="home-photo-credit">Photo: Loïc Bourniquel</figcaption>
+      </figure>
     </section>
   </SiteLayout>
 )

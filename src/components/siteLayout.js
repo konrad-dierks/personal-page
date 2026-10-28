@@ -1,5 +1,4 @@
 import * as React from "react"
-import "./layout.css"
 import SiteNav from "./siteNav"
 import SiteFooter from "./siteFooter"
 
