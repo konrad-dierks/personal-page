@@ -23,6 +23,9 @@ const IndexPage = () => (
         <p>
           My main <a href="/research">research</a> project and upcoming <a href={withPrefix("/jmp.pdf")}>job market paper</a> is about the cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
         </p>
+        <p>
+          <b>Email: </b><a href="mailto:konrad.dierks@tse-fr.eu">konrad.dierks@tse-fr.eu</a>
+        </p>
       </div>
       <figure className="home-figure">
         <img

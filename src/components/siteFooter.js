@@ -55,7 +55,8 @@ const SiteFooter = ({ pageIcon = null }) => (
       Third party packages: <a href="/notice">Notice</a>
     </p>
     <p>
-      Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>
+      Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>,{" "}
+      <a href="mailto:konrad.dierks@tse-fr.eu">konrad.dierks@tse-fr.eu</a>
     <br></br>
       I acknowledge funding from the French National Research Agency under the EUR grant ANR-18-EURE-0021, the grant ANR-21-ESRE-0051 (computing resources from the MesoNET resources center, allocation m26158), and the project AVINEQ.
     </p>
