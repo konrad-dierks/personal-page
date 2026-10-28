@@ -16,12 +16,12 @@ const IndexPage = () => (
         </p>
         <h2>Research interests</h2>
         <p>
-          <b>Main: </b>Energy economics
+          <b>Main: </b>Environmental and Energy Economics
           <br></br>
           <b>Secondary: </b>Political economics, optimization, and numerical methods
         </p>
         <p>
-          My <a href="/research">main project</a> and upcoming job market paper is about the cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
+          My main <a href="/research">research</a> project and upcoming <a href={withPrefix("/jmp.pdf")}>job market paper</a> is about the cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
         </p>
       </div>
       <figure className="home-figure">

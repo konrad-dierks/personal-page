@@ -6,23 +6,25 @@ import { MoonIcon, SunIcon } from "@sanity/icons"
 const NAV_FIT_EPSILON = 1
 const SIDE_NAV_ENTER_BUFFER_PX = 8
 const SIDE_NAV_EXIT_BUFFER_PX = 8
+// Listed under Research in the side nav only
+const RESEARCH_SUBPAGES = [
+  { to: "/job-market-paper/", label: "Job Market Paper" },
+  { to: "/turnout-paper/", label: "Turnout Paper" },
+]
 
 const SiteNav = () => {
   const location = useLocation()
   const navRef = React.useRef(null)
-  const moreItemRef = React.useRef(null)
   const brandMeasureRef = React.useRef(null)
   const themeMeasureRef = React.useRef(null)
   const cvMeasureRef = React.useRef(null)
   const researchMeasureRef = React.useRef(null)
-  const moreMeasureRef = React.useRef(null)
   const [isHorizontal, setIsHorizontal] = React.useState(true)
   const [useSideNav, setUseSideNav] = React.useState(false)
   const [isPortrait, setIsPortrait] = React.useState(
     typeof window === "undefined" ? false : window.innerHeight > window.innerWidth,
   )
   const [menuOpen, setMenuOpen] = React.useState(false)
-  const [moreOpen, setMoreOpen] = React.useState(false)
   const [isAtTop, setIsAtTop] = React.useState(true)
   const [themeOverride, setThemeOverride] = React.useState(() => {
     if (typeof window === "undefined") {
@@ -38,9 +40,9 @@ const SiteNav = () => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches
   })
   const pathname = location?.pathname || ""
-  const isMoreActive =
-    pathname === "/turnout-paper" || pathname.startsWith("/turnout-paper/")
-  const shouldKeepMoreOpen = useSideNav && isMoreActive
+  const isResearchSectionActive = RESEARCH_SUBPAGES.some(
+    ({ to }) => pathname === to || pathname === to.replace(/\/$/, ""),
+  )
 
   const updateNavLayout = React.useCallback(() => {
     if (typeof window === "undefined") {
@@ -94,9 +96,7 @@ const SiteNav = () => {
     const navWidth = navRef.current?.getBoundingClientRect().width ?? 0
     const requiredWidth = getWidth(brandMeasureRef) + getWidth(themeMeasureRef)
     const pageButtonsWidth =
-      getWidth(cvMeasureRef) +
-      getWidth(researchMeasureRef) +
-      getWidth(moreMeasureRef)
+      getWidth(cvMeasureRef) + getWidth(researchMeasureRef)
 
     if (navWidth <= 0 || requiredWidth <= 0 || pageButtonsWidth <= 0) {
       return
@@ -135,7 +135,6 @@ const SiteNav = () => {
         themeMeasureRef.current,
         cvMeasureRef.current,
         researchMeasureRef.current,
-        moreMeasureRef.current,
       ].forEach(node => {
         if (node) {
           resizeObserver.observe(node)
@@ -213,7 +212,6 @@ const SiteNav = () => {
       setIsAtTop(atTop)
       if (isPortrait && !atTop) {
         setMenuOpen(false)
-        setMoreOpen(false)
       }
     }
 
@@ -221,62 +219,6 @@ const SiteNav = () => {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [isPortrait])
-
-  React.useEffect(() => {
-    setMoreOpen(false)
-  }, [isHorizontal])
-
-  React.useEffect(() => {
-    if (!useSideNav) {
-      setMoreOpen(false)
-      return
-    }
-
-    if (isMoreActive) {
-      setMoreOpen(true)
-    }
-  }, [useSideNav, isMoreActive])
-
-  React.useEffect(() => {
-    if (menuOpen) {
-      return
-    }
-    setMoreOpen(false)
-  }, [menuOpen])
-
-  React.useEffect(() => {
-    if (shouldKeepMoreOpen) {
-      setMoreOpen(true)
-    }
-  }, [shouldKeepMoreOpen])
-
-  React.useEffect(() => {
-    if (typeof window === "undefined" || !moreOpen || shouldKeepMoreOpen) {
-      return undefined
-    }
-
-    const handlePointerDown = event => {
-      if (moreItemRef.current && !moreItemRef.current.contains(event.target)) {
-        setMoreOpen(false)
-      }
-    }
-
-    const handleKeyDown = event => {
-      if (event.key === "Escape") {
-        setMoreOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handlePointerDown)
-    document.addEventListener("touchstart", handlePointerDown)
-    window.addEventListener("keydown", handleKeyDown)
-
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown)
-      document.removeEventListener("touchstart", handlePointerDown)
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [moreOpen, shouldKeepMoreOpen])
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -335,21 +277,8 @@ const SiteNav = () => {
 
   const handleNavItemSelect = () => {
     setMenuOpen(false)
-    setMoreOpen(false)
   }
 
-  const handleMoreGroupItemSelect = () => {
-    setMenuOpen(false)
-    if (!useSideNav) {
-      setMoreOpen(false)
-    }
-  }
-
-  const moreMenuId = useSideNav
-    ? "site-nav-more-menu-side"
-    : isHorizontal
-      ? "site-nav-more-menu-horizontal"
-      : "site-nav-more-menu-vertical"
   const navItems = (
     <>
       <li className="nav-item nav-item--page">
@@ -364,47 +293,14 @@ const SiteNav = () => {
       <li className="nav-item nav-item--page">
         <Link
           to="/research"
+          className={
+            isResearchSectionActive ? "site-nav-link--active" : undefined
+          }
           activeClassName="site-nav-link--active"
           onClick={handleNavItemSelect}
         >
           Research
         </Link>
-      </li>
-      <li className="nav-item nav-item--page nav-item--more" ref={moreItemRef}>
-        <button
-          className={`site-nav-more-toggle${
-            isMoreActive ? " site-nav-link--active" : ""
-          }`}
-          type="button"
-          onClick={() =>
-            setMoreOpen(open => (shouldKeepMoreOpen ? true : !open))
-          }
-          aria-expanded={moreOpen}
-          aria-controls={moreMenuId}
-        >
-          <span className="site-nav-more-label">More</span>
-        </button>
-        {moreOpen ? (
-          <ul
-            id={moreMenuId}
-            className={`site-nav-more-dropdown${
-              isHorizontal
-                ? " site-nav-more-dropdown--horizontal"
-                : " site-nav-more-dropdown--vertical"
-            }`}
-          >
-            <li>
-              <Link
-                to="/turnout-paper/"
-                activeClassName="site-nav-link--active"
-                partiallyActive={true}
-                onClick={handleMoreGroupItemSelect}
-              >
-                Turnout Paper Appendix
-              </Link>
-            </li>
-          </ul>
-        ) : null}
       </li>
     </>
   )
@@ -445,11 +341,6 @@ const SiteNav = () => {
           Research
         </a>
       </li>
-      <li className="nav-item nav-item--page" ref={moreMeasureRef}>
-        <span className="site-nav-more-toggle" aria-hidden="true">
-          More
-        </span>
-      </li>
     </ul>
   )
 
@@ -478,35 +369,20 @@ const SiteNav = () => {
         >
           Research
         </Link>
-      </li>
-      <li className="site-side-nav-item site-side-nav-item--more" ref={moreItemRef}>
-        <button
-          className={`site-nav-more-toggle site-side-nav-more-toggle${
-            isMoreActive ? " site-nav-link--active" : ""
-          }`}
-          type="button"
-          onClick={() =>
-            setMoreOpen(open => (shouldKeepMoreOpen ? true : !open))
-          }
-          aria-expanded={moreOpen}
-          aria-controls={moreMenuId}
-        >
-          <span className="site-nav-more-label">More</span>
-        </button>
-        {moreOpen ? (
-          <ul id={moreMenuId} className="site-side-nav-sublist">
-            <li>
+        <ul className="site-side-nav-sublist">
+          {RESEARCH_SUBPAGES.map(({ to, label }) => (
+            <li key={to}>
               <Link
-                to="/turnout-paper/"
+                to={to}
                 activeClassName="site-nav-link--active"
                 partiallyActive={true}
-                onClick={handleMoreGroupItemSelect}
+                onClick={handleNavItemSelect}
               >
-                Turnout Paper Appendix
+                {label}
               </Link>
             </li>
-          </ul>
-        ) : null}
+          ))}
+        </ul>
       </li>
     </ul>
   )
@@ -545,12 +421,7 @@ const SiteNav = () => {
                     className="site-nav-toggle"
                     type="button"
                     onClick={() => {
-                      setMenuOpen(open => {
-                        if (open) {
-                          setMoreOpen(false)
-                        }
-                        return !open
-                      })
+                      setMenuOpen(open => !open)
                     }}
                     aria-expanded={menuOpen}
                   >

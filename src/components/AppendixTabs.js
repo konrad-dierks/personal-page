@@ -4,6 +4,7 @@ import { GithubIcon } from "@sanity/icons"
 import "react-tabs/style/react-tabs.css"
 import ConsistentStrategies from "./ConsistentStrategies"
 import BenefitFunctions from "./BenefitFunctions"
+import { TurnoutPaperAbstract } from "./abstracts"
 
 const tabHashes = ["overview", "tab1", "tab2"]
 const hashToIndex = hash => {
@@ -59,6 +60,14 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
 
       <TabPanel>
         <div>
+          <p>
+            With <a href="https://ingelaalger.weebly.com/">Ingela Alger</a> and{" "}
+            <a href="https://sites.google.com/site/jflaslierhomepage/">
+              Jean-François Laslier
+            </a>
+          </p>
+          <h2>Abstract</h2>
+          <TurnoutPaperAbstract />
           Welcome to the bonus content page for our paper{" "}
           <cite>
             Does universalization ethics justify participation in large
