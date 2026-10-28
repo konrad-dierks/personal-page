@@ -66,14 +66,14 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
               Jean-François Laslier
             </a>
           </p>
+          <p>
+            <b>Paper:</b>{" "}
+            <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0">
+              TSE working paper (2026)
+            </a>
+          </p>
           <h2>Abstract</h2>
           <TurnoutPaperAbstract />
-          Welcome to the bonus content page for our paper{" "}
-          <cite>
-            Does universalization ethics justify participation in large
-            elections?
-          </cite>{" "}
-          [1]
           <h2>Code for the graphics</h2>
           <p>
             The code for generating the graphics in the paper can be found here:{" "}
@@ -94,29 +94,11 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
           <p>
             Moreover, we provide <a href="#tab2">an interactive plot</a> that
             compares our choice of the power-sharing function with the one used
-            by Herrera, Morelli and Nunnari (2016) [2].
-          </p>
-          <h2>Authors</h2>
-          <p>
-            <a href="https://ingelaalger.weebly.com/">Ingela Alger</a>,{" "}
-            <a href="https://www.konraddierks.eu/">Konrad Dierks</a>,{" "}
-            <a href="https://sites.google.com/site/jflaslierhomepage/">
-              Jean-François Laslier
-            </a>
+            by Herrera, Morelli and Nunnari (2016) [1].
           </p>
           <h2>References</h2>
           <p>
-            1. Konrad Dierks, Ingela Alger, and Jean-François Laslier, Does
-            universalization ethics justify participation in large elections?,
-            TSE Working Paper, n. 21-1193, February 2021, revised May 2026.
-            <span className="reference-link-line">
-              <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0">
-                https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0
-              </a>
-            </span>
-          </p>
-          <p>
-            2. Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
+            1. Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
             Democracies. American Journal of Political Science, 60: 607-624.
             <span className="reference-link-line">
               <a href="https://doi.org/10.1111/ajps.12215">
