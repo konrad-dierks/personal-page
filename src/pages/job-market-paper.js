@@ -16,7 +16,12 @@ const JobMarketPaperPage = () => (
       <h2 className="appendix-subtitle">Job Market Paper</h2>
     </header>
     <p>
-      <a className="cv-download-link" href={withPrefix("/jmp.pdf")}>
+      <a
+        className="cv-download-link"
+        href={withPrefix("/jmp.pdf")}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <DocumentPdfIcon className="cv-download-icon" aria-hidden="true" />
         <span>Paper (PDF)</span>
       </a>

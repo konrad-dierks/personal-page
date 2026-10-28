@@ -23,8 +23,6 @@ const ResearchPage = () => (
         <h3><i>Job Market Paper</i></h3>
         <JobMarketPaperAbstract />
         <p>
-          <b>Draft available on request.</b>
-          <br />
           <b>Presented at (selection):</b>
           <br />
           2025: EAERE conference (Bergen), FAERE conference (Nantes), ENTER Jamboree (Stockholm), UAB (Barcelona, ENTER exchange seminar), University of Leipzig lunchtime seminar.
