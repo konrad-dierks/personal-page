@@ -12,7 +12,7 @@ module.exports = {
     title: `Konrad Dierks`,
     description: `Personal page`,
     author: `Konrad Dierks`,
-    siteUrl: `https://konraddierks.eu/`,
+    siteUrl: `https://www.konraddierks.eu/`,
   },
   plugins: [],
 }
