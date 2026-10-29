@@ -8,7 +8,11 @@ import usePrefersDark from "./usePrefersDark"
 const ConsistentStrategies = () => {
   const [m, setM] = useState(1)
   const [gamma, setGamma] = useState(1)
-  const [isHorizontal, setIsHorizontal] = useState(typeof window === 'undefined' ? true : window.innerWidth > window.innerHeight)
+  const [isHorizontal, setIsHorizontal] = useState(
+    typeof window === "undefined"
+      ? true
+      : window.innerWidth > window.innerHeight
+  )
   const [mData, setmData] = useState({ x: [], y: [] })
   const [gammaData, setGammaData] = useState({ x: [], y: [] })
   const prefersDark = usePrefersDark()
@@ -41,10 +45,9 @@ const ConsistentStrategies = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (typeof window === 'undefined') {
-        setIsHorizontal(true);
-      }
-      else {
+      if (typeof window === "undefined") {
+        setIsHorizontal(true)
+      } else {
         setIsHorizontal(window.innerWidth > window.innerHeight)
       }
     }
@@ -229,7 +232,11 @@ const ConsistentStrategies = () => {
         <p>
           [1] Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
           Democracies. American Journal of Political Science, 60: 607-624.{" "}
-          <a href="https://doi.org/10.1111/ajps.12215" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://doi.org/10.1111/ajps.12215"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             https://doi.org/10.1111/ajps.12215
           </a>
         </p>

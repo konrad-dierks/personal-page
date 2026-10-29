@@ -1,5 +1,5 @@
-import loadable from '@loadable/component';
+import loadable from "@loadable/component"
 
-const Plot = loadable(() => import('react-plotly.js'));
+const Plot = loadable(() => import("react-plotly.js"))
 
-export default Plot;
+export default Plot

@@ -23,7 +23,9 @@ const SiteNav = () => {
   const [isHorizontal, setIsHorizontal] = React.useState(true)
   const [useSideNav, setUseSideNav] = React.useState(false)
   const [isPortrait, setIsPortrait] = React.useState(
-    typeof window === "undefined" ? false : window.innerHeight > window.innerWidth,
+    typeof window === "undefined"
+      ? false
+      : window.innerHeight > window.innerWidth
   )
   const [menuOpen, setMenuOpen] = React.useState(false)
   const [researchOpen, setResearchOpen] = React.useState(false)
@@ -74,7 +76,8 @@ const SiteNav = () => {
     const sideNavBaseThreshold =
       Number.parseFloat(rootStyle.getPropertyValue("--side-nav-width")) +
       Number.parseFloat(rootStyle.getPropertyValue("--side-nav-gap"))
-    const sideNavEnterThreshold = sideNavBaseThreshold + SIDE_NAV_ENTER_BUFFER_PX
+    const sideNavEnterThreshold =
+      sideNavBaseThreshold + SIDE_NAV_ENTER_BUFFER_PX
     const sideNavExitThreshold = sideNavBaseThreshold - SIDE_NAV_EXIT_BUFFER_PX
     const canUseSideNav =
       isLandscape &&
@@ -358,19 +361,20 @@ const SiteNav = () => {
                 : " site-nav-dropdown--vertical"
             }`}
           >
-            {[{ to: "/research/", label: "Overview" }, ...RESEARCH_SUBPAGES].map(
-              ({ to, label }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    activeClassName="site-nav-link--active"
-                    onClick={handleNavItemSelect}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ),
-            )}
+            {[
+              { to: "/research/", label: "Overview" },
+              ...RESEARCH_SUBPAGES,
+            ].map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  activeClassName="site-nav-link--active"
+                  onClick={handleNavItemSelect}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         ) : null}
       </li>
@@ -473,7 +477,9 @@ const SiteNav = () => {
     <div
       className={`site-nav-bar${
         isPortrait && !isAtTop ? " site-nav-bar--hidden" : ""
-      } ${isHorizontal ? "site-nav-bar--horizontal" : "site-nav-bar--vertical"}`}
+      } ${
+        isHorizontal ? "site-nav-bar--horizontal" : "site-nav-bar--vertical"
+      }`}
     >
       <div className="site-nav-inner">
         <header className="site-header site-header--bar">

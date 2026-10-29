@@ -12,7 +12,10 @@ const ResearchPage = () => (
     <section className="research-list">
       <article className="research-item">
         <p>
-          <b>Is a 100% renewable electricity mix cost-efficient under weather uncertainty?</b>
+          <b>
+            Is a 100% renewable electricity mix cost-efficient under weather
+            uncertainty?
+          </b>
           <br />
           Job Market Paper
           <br />
@@ -28,17 +31,28 @@ const ResearchPage = () => (
       </article>
       <article className="research-item">
         <p>
-          <b>Does universalization ethics justify participation in large elections?</b>
+          <b>
+            Does universalization ethics justify participation in large
+            elections?
+          </b>
           <br />
           With Ingela Alger and Jean-François Laslier, under review at
           Theoretical Economics
           <br />
           <Link to="/turnout-paper/">Abstract and bonus content</Link> ·{" "}
-          <a href="https://github.com/konrad-dierks/homo-moralis-turnout" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://github.com/konrad-dierks/homo-moralis-turnout"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub repository
           </a>{" "}
           ·{" "}
-          <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             TSE working paper (2026)
           </a>
         </p>

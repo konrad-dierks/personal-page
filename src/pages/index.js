@@ -10,7 +10,8 @@ const IndexPage = () => (
       <div className="home-text">
         <h1>Konrad Dierks</h1>
         <p>
-          Hi, I am a fifth-year PhD student in the Environmental Group at Toulouse School of Economics.
+          Hi, I am a fifth-year PhD student in the Environmental Group at
+          Toulouse School of Economics.
           <br></br>
           My advisor is Christian Gollier.
         </p>
@@ -18,13 +19,24 @@ const IndexPage = () => (
         <p>
           <b>Main: </b>Environmental and Energy Economics
           <br></br>
-          <b>Secondary: </b>Political economics, optimization, and numerical methods
+          <b>Secondary: </b>Political economics, optimization, and numerical
+          methods
         </p>
         <p>
-          My main <Link to="/research/">research</Link> project and upcoming <a href={withPrefix("/jmp.pdf")} target="_blank" rel="noopener noreferrer">job market paper</a> is about the cost efficiency of a fully renewable electricity mix under weather uncertainty in Germany.
+          My main <Link to="/research/">research</Link> project and upcoming{" "}
+          <a
+            href={withPrefix("/jmp.pdf")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            job market paper
+          </a>{" "}
+          is about the cost efficiency of a fully renewable electricity mix
+          under weather uncertainty in Germany.
         </p>
         <p>
-          <b>Email: </b><a href="mailto:konrad.dierks@tse-fr.eu">konrad.dierks@tse-fr.eu</a>
+          <b>Email: </b>
+          <a href="mailto:konrad.dierks@tse-fr.eu">konrad.dierks@tse-fr.eu</a>
         </p>
       </div>
       <figure className="home-figure">
@@ -35,7 +47,9 @@ const IndexPage = () => (
           width="800"
           height="1066"
         />
-        <figcaption className="home-photo-credit">Photo: Loïc Bourniquel</figcaption>
+        <figcaption className="home-photo-credit">
+          Photo: Loïc Bourniquel
+        </figcaption>
       </figure>
     </section>
   </SiteLayout>

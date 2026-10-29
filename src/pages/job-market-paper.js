@@ -16,7 +16,10 @@ const JMP_FAVICON_DARK = "/favicon-jmp-dark-v4.svg"
 const JobMarketPaperPage = () => (
   <SiteLayout pageIcon="jmp">
     <header className="appendix-header">
-      <h1>Is a 100% renewable electricity mix cost-efficient under weather uncertainty?</h1>
+      <h1>
+        Is a 100% renewable electricity mix cost-efficient under weather
+        uncertainty?
+      </h1>
       <h2 className="appendix-subtitle">Job Market Paper</h2>
     </header>
     <p>

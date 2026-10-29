@@ -12,7 +12,8 @@ const normalizeHeading = text => text.replace(/\s+/g, " ").trim().toLowerCase()
 const injectResearchLink = (cvRoot, researchHref) => {
   const headings = cvRoot.querySelectorAll("h1, h2, h3, h4, h5, h6")
   const researchHeading = Array.from(headings).find(
-    heading => normalizeHeading(heading.textContent || "") === "research interests"
+    heading =>
+      normalizeHeading(heading.textContent || "") === "research interests"
   )
 
   if (!researchHeading) {

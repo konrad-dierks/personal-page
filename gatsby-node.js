@@ -15,7 +15,11 @@ exports.onCreatePage = async ({ page, actions }) => {
   let cvHtml = ""
 
   try {
-    const cvHtmlPath = path.join(process.cwd(), "static", "cv_konrad_dierks.html")
+    const cvHtmlPath = path.join(
+      process.cwd(),
+      "static",
+      "cv_konrad_dierks.html"
+    )
     const rawHtml = fs.readFileSync(cvHtmlPath, "utf8")
     cvHtml = extractBodyHtml(rawHtml)
   } catch (error) {

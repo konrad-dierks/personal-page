@@ -6,13 +6,24 @@ const SiteFooter = ({ pageIcon = null }) => (
   <footer className="site-footer">
     <p>
       © {new Date().getFullYear()} Konrad Dierks &middot; Hosted on GitHub Pages
-      &middot; Built with <a href="https://www.gatsbyjs.com" target="_blank" rel="noopener noreferrer">Gatsby</a>
+      &middot; Built with{" "}
+      <a
+        href="https://www.gatsbyjs.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Gatsby
+      </a>
     </p>
     <p>
       Source code:{" "}
       <span className="inline-link-with-icon">
         <GithubIcon className="link-icon" aria-hidden="true" />
-        <a href="https://github.com/konrad-dierks/personal-page" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://github.com/konrad-dierks/personal-page"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           https://github.com/konrad-dierks/personal-page
         </a>
       </span>
@@ -20,7 +31,11 @@ const SiteFooter = ({ pageIcon = null }) => (
       {pageIcon === "turnout" ? (
         <>
           The webpage icon "
-          <a href="https://commons.wikimedia.org/w/index.php?curid=157180000" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://commons.wikimedia.org/w/index.php?curid=157180000"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Arcticons-black emoji ballot box with ballot
           </a>
           " by Arcticons Team is licensed under{" "}
@@ -31,15 +46,19 @@ const SiteFooter = ({ pageIcon = null }) => (
           >
             CC BY-SA 4.0{" "}
           </a>
-          . Modified for greater line width. On dark browser theme: further modified
-          for color inversion.
+          . Modified for greater line width. On dark browser theme: further
+          modified for color inversion.
           <br></br>
         </>
       ) : null}
       {pageIcon === "jmp" ? (
         <>
           The webpage icon "
-          <a href="https://tabler.io/icons?icon=building-wind-turbine" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://tabler.io/icons?icon=building-wind-turbine"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             building-wind-turbine
           </a>
           " from Tabler Icons by Paweł Kuna is licensed under the{" "}
@@ -58,10 +77,13 @@ const SiteFooter = ({ pageIcon = null }) => (
       Third party packages: <Link to="/notice/">Notice</Link>
     </p>
     <p>
-      Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>,{" "}
+      Contact:{" "}
+      <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>,{" "}
       <a href="mailto:konrad.dierks@tse-fr.eu">konrad.dierks@tse-fr.eu</a>
-    <br></br>
-      I acknowledge funding from the French National Research Agency under the EUR grant ANR-18-EURE-0021, the grant ANR-21-ESRE-0051 (computing resources from the MesoNET resources center, allocation m26158), and the project AVINEQ.
+      <br></br>I acknowledge funding from the French National Research Agency
+      under the EUR grant ANR-18-EURE-0021, the grant ANR-21-ESRE-0051
+      (computing resources from the MesoNET resources center, allocation
+      m26158), and the project AVINEQ.
     </p>
   </footer>
 )

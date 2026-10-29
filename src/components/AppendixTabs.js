@@ -65,14 +65,30 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
       <TabPanel>
         <div>
           <p>
-            With <a href="https://ingelaalger.weebly.com/" target="_blank" rel="noopener noreferrer">Ingela Alger</a> and{" "}
-            <a href="https://sites.google.com/site/jflaslierhomepage/" target="_blank" rel="noopener noreferrer">
+            With{" "}
+            <a
+              href="https://ingelaalger.weebly.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ingela Alger
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://sites.google.com/site/jflaslierhomepage/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Jean-François Laslier
             </a>
           </p>
           <p>
             <b>Paper:</b>{" "}
-            <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               TSE working paper (2026)
             </a>
           </p>
@@ -85,7 +101,11 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
             <br />
             <span className="inline-link-with-icon">
               <GithubIcon className="link-icon" aria-hidden="true" />
-              <a href="https://github.com/konrad-dierks/homo-moralis-turnout" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://github.com/konrad-dierks/homo-moralis-turnout"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 GitHub repository
               </a>
             </span>
@@ -106,7 +126,11 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
             1. Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
             Democracies. American Journal of Political Science, 60: 607-624.
             <span className="reference-link-line">
-              <a href="https://doi.org/10.1111/ajps.12215" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://doi.org/10.1111/ajps.12215"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 https://doi.org/10.1111/ajps.12215
               </a>
             </span>
