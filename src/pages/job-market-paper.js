@@ -24,12 +24,12 @@ const JobMarketPaperPage = () => (
     </header>
     <p>
       <a
-        className="cv-download-link"
+        className="pdf-button"
         href={withPrefix("/jmp.pdf")}
         target="_blank"
         rel="noopener noreferrer"
       >
-        <DocumentPdfIcon className="cv-download-icon" aria-hidden="true" />
+        <DocumentPdfIcon className="pdf-button-icon" aria-hidden="true" />
         <span>Paper (PDF)</span>
       </a>
     </p>

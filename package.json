@@ -19,7 +19,6 @@
     "react-tabs": "^6.1.0"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0",
     "prettier": "^2.8.8"
   },
   "engines": {
@@ -28,7 +27,6 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "deploy": "gatsby build && gh-pages -d public",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
     "start": "gatsby develop",

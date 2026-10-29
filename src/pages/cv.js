@@ -116,8 +116,8 @@ const CvPage = ({ pageContext }) => {
       <section className="cv-section">
         <header className="cv-header">
           <h1>Curriculum Vitae</h1>
-          <a className="cv-download-link" href={pdfHref} download>
-            <DocumentPdfIcon className="cv-download-icon" aria-hidden="true" />
+          <a className="pdf-button" href={pdfHref} download>
+            <DocumentPdfIcon className="pdf-button-icon" aria-hidden="true" />
             <span>Download PDF</span>
           </a>
         </header>

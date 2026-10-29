@@ -22,5 +22,4 @@ The job market paper (`jmp.pdf`) and the CV (`cv_konrad_dierks.pdf`, `cv_konrad_
 | @fontsource-variable/source-sans-3 | OFL-1.1      | git+https://github.com/fontsource/fontsource.git         | Fontsource       |
 | @fontsource/libertinus-serif       | OFL-1.1      | git+https://github.com/fontsource/font-files.git         | Fontsource       |
 | @loadable/component                | MIT          | git+https://github.com/gregberge/loadable-components.git | Greg Bergé       |
-| gh-pages                           | MIT          | git+https://github.com/tschaub/gh-pages.git              | Tim Schaub       |
 | prettier                           | MIT          | git+https://github.com/prettier/prettier.git             | James Long       |

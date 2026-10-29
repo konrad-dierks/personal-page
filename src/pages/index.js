@@ -17,7 +17,7 @@ const IndexPage = () => (
         </p>
         <h2>Research interests</h2>
         <p>
-          <b>Main: </b>Environmental and Energy Economics
+          <b>Main: </b>Environmental and energy economics
           <br></br>
           <b>Secondary: </b>Political economics, optimization, and numerical
           methods

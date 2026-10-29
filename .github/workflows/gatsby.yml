@@ -75,9 +75,11 @@ jobs:
           path: |
             public
             .cache
-          key: ${{ runner.os }}-gatsby-build-${{ hashFiles('public') }}
+          # A unique key saves a fresh cache after every build; the restore key
+          # picks up the latest one built with the same dependencies.
+          key: ${{ runner.os }}-gatsby-build-${{ hashFiles('yarn.lock') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-gatsby-build-
+            ${{ runner.os }}-gatsby-build-${{ hashFiles('yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Gatsby

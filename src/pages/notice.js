@@ -51,12 +51,6 @@ const NoticePage = () => {
       author: "Sanity.io",
     },
     {
-      name: "gh-pages",
-      license: "MIT",
-      link: "https://github.com/tschaub/gh-pages.git",
-      author: "Tim Schaub",
-    },
-    {
       name: "prettier",
       license: "MIT",
       link: "https://github.com/prettier/prettier.git",
@@ -106,6 +100,7 @@ const NoticePage = () => {
   return (
     <SiteLayout>
       <div>
+        <h1>Third party package notice</h1>
         <h2>Main site packages</h2>
         <table style={tableStyle}>
           <thead>

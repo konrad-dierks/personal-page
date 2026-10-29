@@ -994,7 +994,7 @@ p {
   margin: 0;
 }
 
-.cv-download-link {
+.pdf-button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1005,7 +1005,7 @@ p {
   font-weight: 600;
 }
 
-.cv-download-icon {
+.pdf-button-icon {
   width: 1.05rem;
   height: 1.05rem;
 }

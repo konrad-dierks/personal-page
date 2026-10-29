@@ -64,7 +64,7 @@ export const JobMarketPaperPresentations = () => (
     <br />
     2025: EAERE conference (Bergen), FAERE conference (Nantes), ENTER Jamboree
     (Stockholm), UAB (Barcelona, ENTER exchange seminar), University of Leipzig
-    lunchtime seminar.
+    lunchtime seminar
     <br />
     2026: EDF (Paris), Doctorissimes (Paris), HYRCE (Liège), EEA-ESEM Congress
     (Dublin), IAEE European Conference (Munich), IAEE COP Symposium (Antalya,
@@ -76,9 +76,9 @@ export const TurnoutPaperPresentations = () => (
   <p>
     <b>Presented at:</b>
     <br />
-    2024: EEA-ESEM Congress (Rotterdam), ESA European Meeting (Helsinki).
+    2024: EEA-ESEM Congress (Rotterdam), ESA European Meeting (Helsinki)
     <br />
-    2025: QMUL Economics and Finance PhD workshop (London).
+    2025: QMUL Economics and Finance PhD workshop (London)
   </p>
 )
 
