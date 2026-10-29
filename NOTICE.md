@@ -12,7 +12,7 @@ The job market paper (`jmp.pdf`) and the CV (`cv_konrad_dierks.pdf`, `cv_konrad_
 | :--------------------------------- | :----------- | :------------------------------------------------------- | :--------------- |
 | flo-poly                           | MIT          | git+https://github.com/FlorisSteenkamp/FloPoly.git       | Floris Steenkamp |
 | gatsby                             | MIT          | git+https://github.com/gatsbyjs/gatsby.git               | Kyle Mathews     |
-| plotly.js                          | MIT          | git+https://github.com/plotly/plotly.js.git              | Plotly, Inc.     |
+| plotly.js-basic-dist-min           | MIT          | git+https://github.com/plotly/plotly.js.git              | Plotly, Inc.     |
 | react                              | MIT          | git+https://github.com/facebook/react.git                | n/a              |
 | react-dom                          | MIT          | git+https://github.com/facebook/react.git                | n/a              |
 | react-plotly.js                    | MIT          | git+https://github.com/plotly/react-plotly.js.git        | Plotly, Inc.     |

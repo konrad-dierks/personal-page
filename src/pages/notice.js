@@ -66,7 +66,7 @@ const NoticePage = () => {
       author: "Floris Steenkamp",
     },
     {
-      name: "plotly.js",
+      name: "plotly.js-basic-dist-min",
       license: "MIT",
       link: "https://github.com/plotly/plotly.js.git",
       author: "Plotly, Inc.",

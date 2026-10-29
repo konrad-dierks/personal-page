@@ -11,7 +11,7 @@
     "@sanity/icons": "^3.7.4",
     "flo-poly": "^7.0.0",
     "gatsby": "^5.16.1",
-    "plotly.js": "^4.1.0",
+    "plotly.js-basic-dist-min": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-latex-next": "^3.0.0",
