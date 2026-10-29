@@ -26,10 +26,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
+    "build": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby build",
+    "develop": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
-    "start": "gatsby develop",
+    "start": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby develop",
     "clean": "gatsby clean"
   },
   "repository": {

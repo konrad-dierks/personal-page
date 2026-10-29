@@ -261,7 +261,8 @@ const orderLinePoints = (points, edges) => {
 
   while (current !== -1) {
     ordered.push(points[current])
-    const next = adjacency[current].find(neighbor => neighbor !== previous)
+    const from = previous
+    const next = adjacency[current].find(neighbor => neighbor !== from)
     previous = current
     current = next ?? -1
   }
@@ -317,9 +318,8 @@ const decomposeComponentPaths = (points, edges) => {
       let current = neighbor
 
       while (degrees[current] === 2) {
-        const nextNodes = treeAdjacency[current].filter(
-          node => node !== previous
-        )
+        const from = previous
+        const nextNodes = treeAdjacency[current].filter(node => node !== from)
         if (nextNodes.length !== 1) {
           break
         }
