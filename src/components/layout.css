@@ -761,7 +761,9 @@ p {
   align-items: center;
   height: 100%;
   align-self: stretch;
-  font-size: 1.05rem;
+  /* Shrink on narrow phones so the name stays on one line */
+  font-size: min(1.05rem, 5vw);
+  white-space: nowrap;
 }
 
 .site-nav-bar--vertical .site-nav-mobile-brand {
@@ -957,12 +959,12 @@ p {
   gap: var(--space-4);
 }
 
-.research-item h2 {
-  margin-top: 0;
+.paper-abstract {
+  font-size: 0.8em;
 }
 
-.research-item h2 a {
-  font-weight: inherit;
+.paper-abstract p:not(:last-child) {
+  margin-bottom: var(--space-2);
 }
 
 .research-funding {

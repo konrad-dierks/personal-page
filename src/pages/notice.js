@@ -122,7 +122,7 @@ const NoticePage = () => {
                 <td style={cellStyle}>{pkg.name}</td>
                 <td style={cellStyle}>{pkg.license}</td>
                 <td style={cellStyle}>
-                  <a href={pkg.link}>Link</a>
+                  <a href={pkg.link} target="_blank" rel="noopener noreferrer">Link</a>
                 </td>
                 <td style={cellStyle}>{pkg.author}</td>
               </tr>
@@ -145,7 +145,7 @@ const NoticePage = () => {
                 <td style={cellStyle}>{pkg.name}</td>
                 <td style={cellStyle}>{pkg.license}</td>
                 <td style={cellStyle}>
-                  <a href={pkg.link}>Link</a>
+                  <a href={pkg.link} target="_blank" rel="noopener noreferrer">Link</a>
                 </td>
                 <td style={cellStyle}>{pkg.author}</td>
               </tr>

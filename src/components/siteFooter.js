@@ -1,17 +1,18 @@
 import * as React from "react"
+import { Link } from "gatsby"
 import { GithubIcon } from "@sanity/icons"
 
 const SiteFooter = ({ pageIcon = null }) => (
   <footer className="site-footer">
     <p>
       © {new Date().getFullYear()} Konrad Dierks &middot; Hosted on GitHub Pages
-      &middot; Built with <a href="https://www.gatsbyjs.com">Gatsby</a>
+      &middot; Built with <a href="https://www.gatsbyjs.com" target="_blank" rel="noopener noreferrer">Gatsby</a>
     </p>
     <p>
       Source code:{" "}
       <span className="inline-link-with-icon">
         <GithubIcon className="link-icon" aria-hidden="true" />
-        <a href="https://github.com/konrad-dierks/personal-page">
+        <a href="https://github.com/konrad-dierks/personal-page" target="_blank" rel="noopener noreferrer">
           https://github.com/konrad-dierks/personal-page
         </a>
       </span>
@@ -19,11 +20,12 @@ const SiteFooter = ({ pageIcon = null }) => (
       {pageIcon === "turnout" ? (
         <>
           The webpage icon "
-          <a href="https://commons.wikimedia.org/w/index.php?curid=157180000">
+          <a href="https://commons.wikimedia.org/w/index.php?curid=157180000" target="_blank" rel="noopener noreferrer">
             Arcticons-black emoji ballot box with ballot
           </a>
           " by Arcticons Team is licensed under{" "}
           <a
+            target="_blank"
             rel="noopener noreferrer"
             href="https://creativecommons.org/licenses/by-sa/4.0/?ref=openverse"
           >
@@ -37,11 +39,12 @@ const SiteFooter = ({ pageIcon = null }) => (
       {pageIcon === "jmp" ? (
         <>
           The webpage icon "
-          <a href="https://tabler.io/icons?icon=building-wind-turbine">
+          <a href="https://tabler.io/icons?icon=building-wind-turbine" target="_blank" rel="noopener noreferrer">
             building-wind-turbine
           </a>
           " from Tabler Icons by Paweł Kuna is licensed under the{" "}
           <a
+            target="_blank"
             rel="noopener noreferrer"
             href="https://github.com/tabler/tabler-icons/blob/main/LICENSE"
           >
@@ -52,7 +55,7 @@ const SiteFooter = ({ pageIcon = null }) => (
           <br></br>
         </>
       ) : null}
-      Third party packages: <a href="/notice">Notice</a>
+      Third party packages: <Link to="/notice/">Notice</Link>
     </p>
     <p>
       Contact: <a href="mailto:konrad.dierks@ecomail.fr">konrad.dierks@ecomail.fr</a>,{" "}

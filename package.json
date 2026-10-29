@@ -1,7 +1,7 @@
 {
-  "name": "homo-moralis-turnout-appendix",
+  "name": "personal-page",
   "private": false,
-  "description": "Does universalization ethics justify participation in large elections? - Bonus Content",
+  "description": "Personal page of Konrad Dierks",
   "version": "1.0.0",
   "author": "Konrad Dierks <konrad.dierks@ecomail.fr>",
   "dependencies": {

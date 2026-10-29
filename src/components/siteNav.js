@@ -358,7 +358,7 @@ const SiteNav = () => {
                 : " site-nav-dropdown--vertical"
             }`}
           >
-            {[{ to: "/research", label: "Overview" }, ...RESEARCH_SUBPAGES].map(
+            {[{ to: "/research/", label: "Overview" }, ...RESEARCH_SUBPAGES].map(
               ({ to, label }) => (
                 <li key={to}>
                   <Link
@@ -435,7 +435,7 @@ const SiteNav = () => {
       </li>
       <li className="site-side-nav-item">
         <Link
-          to="/research"
+          to="/research/"
           activeClassName="site-nav-link--active"
           onClick={handleNavItemSelect}
         >

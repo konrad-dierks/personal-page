@@ -4,7 +4,11 @@ import { GithubIcon } from "@sanity/icons"
 import "react-tabs/style/react-tabs.css"
 import ConsistentStrategies from "./ConsistentStrategies"
 import BenefitFunctions from "./BenefitFunctions"
-import { TurnoutPaperAbstract } from "./abstracts"
+import {
+  TurnoutPaperAbstract,
+  TurnoutPaperFunding,
+  TurnoutPaperPresentations,
+} from "./papers"
 
 const tabHashes = ["overview", "tab1", "tab2"]
 const hashToIndex = hash => {
@@ -61,31 +65,32 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
       <TabPanel>
         <div>
           <p>
-            With <a href="https://ingelaalger.weebly.com/">Ingela Alger</a> and{" "}
-            <a href="https://sites.google.com/site/jflaslierhomepage/">
+            With <a href="https://ingelaalger.weebly.com/" target="_blank" rel="noopener noreferrer">Ingela Alger</a> and{" "}
+            <a href="https://sites.google.com/site/jflaslierhomepage/" target="_blank" rel="noopener noreferrer">
               Jean-François Laslier
             </a>
           </p>
           <p>
             <b>Paper:</b>{" "}
-            <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0">
+            <a href="https://www.tse-fr.eu/publications/working-paper/does-universalization-ethics-justify-participation-large-elections-0" target="_blank" rel="noopener noreferrer">
               TSE working paper (2026)
             </a>
           </p>
-          <h2>Abstract</h2>
+          <b>Abstract:</b>
           <TurnoutPaperAbstract />
-          <h2>Code for the graphics</h2>
+          <TurnoutPaperPresentations />
+          <b>Code for the graphics:</b>
           <p>
             The code for generating the graphics in the paper can be found here:{" "}
             <br />
             <span className="inline-link-with-icon">
               <GithubIcon className="link-icon" aria-hidden="true" />
-              <a href="https://github.com/konrad-dierks/homo-moralis-turnout">
+              <a href="https://github.com/konrad-dierks/homo-moralis-turnout" target="_blank" rel="noopener noreferrer">
                 GitHub repository
               </a>
             </span>
           </p>
-          <h2>Interactive plots</h2>
+          <b>Interactive plots:</b>
           <p>
             We provide <a href="#tab1">an interactive plot</a> showing
             consistent strategies for a wide range of model parameters in our
@@ -96,16 +101,17 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
             compares our choice of the power-sharing function with the one used
             by Herrera, Morelli and Nunnari (2016) [1].
           </p>
-          <h2>References</h2>
+          <b>References:</b>
           <p>
             1. Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
             Democracies. American Journal of Political Science, 60: 607-624.
             <span className="reference-link-line">
-              <a href="https://doi.org/10.1111/ajps.12215">
+              <a href="https://doi.org/10.1111/ajps.12215" target="_blank" rel="noopener noreferrer">
                 https://doi.org/10.1111/ajps.12215
               </a>
             </span>
           </p>
+          <TurnoutPaperFunding />
         </div>
       </TabPanel>
       <TabPanel>

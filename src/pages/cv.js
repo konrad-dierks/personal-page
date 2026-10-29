@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withPrefix } from "gatsby"
+import { navigate, withPrefix } from "gatsby"
 import { DocumentPdfIcon } from "@sanity/icons"
 import "@fontsource/libertinus-serif/400.css"
 import "@fontsource/libertinus-serif/700.css"
@@ -51,6 +51,47 @@ const injectResearchLink = (cvRoot, researchHref) => {
   researchHeading.replaceChildren(...nodes)
 }
 
+const isOwnSiteLink = link =>
+  link.hostname === window.location.hostname ||
+  /(^|\.)konraddierks\.eu$/.test(link.hostname)
+
+// Links to other sites open in a new tab; links back to this site do not
+const openExternalLinksInNewTab = cvRoot => {
+  cvRoot.querySelectorAll("a[href^='http']").forEach(link => {
+    if (isOwnSiteLink(link)) {
+      return
+    }
+    link.setAttribute("target", "_blank")
+    link.setAttribute("rel", "noopener noreferrer")
+  })
+}
+
+// The CV is raw HTML, so its links to this site are plain anchors.
+// Route plain left-clicks on them through Gatsby, like a <Link>.
+const handleOwnSiteLinkClick = event => {
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return
+  }
+
+  const link = event.target.closest("a[href]")
+  if (!link || link.target === "_blank" || !/^https?:$/.test(link.protocol)) {
+    return
+  }
+  if (!isOwnSiteLink(link)) {
+    return
+  }
+
+  event.preventDefault()
+  navigate(`${link.pathname}${link.search}${link.hash}`)
+}
+
 const CvPage = ({ pageContext }) => {
   const pdfHref = withPrefix("/cv_konrad_dierks.pdf")
   const researchHref = withPrefix("/research/")
@@ -58,11 +99,15 @@ const CvPage = ({ pageContext }) => {
   const cvContentRef = React.useRef(null)
 
   React.useEffect(() => {
-    if (!cvHtml || !cvContentRef.current) {
-      return
+    const cvRoot = cvContentRef.current
+    if (!cvHtml || !cvRoot) {
+      return undefined
     }
 
-    injectResearchLink(cvContentRef.current, researchHref)
+    injectResearchLink(cvRoot, researchHref)
+    openExternalLinksInNewTab(cvRoot)
+    cvRoot.addEventListener("click", handleOwnSiteLinkClick)
+    return () => cvRoot.removeEventListener("click", handleOwnSiteLinkClick)
   }, [cvHtml, researchHref])
 
   return (

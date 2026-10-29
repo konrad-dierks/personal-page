@@ -229,7 +229,7 @@ const ConsistentStrategies = () => {
         <p>
           [1] Herrera, H., Morelli, M. and Nunnari, S. (2016), Turnout Across
           Democracies. American Journal of Political Science, 60: 607-624.{" "}
-          <a href="https://doi.org/10.1111/ajps.12215">
+          <a href="https://doi.org/10.1111/ajps.12215" target="_blank" rel="noopener noreferrer">
             https://doi.org/10.1111/ajps.12215
           </a>
         </p>
