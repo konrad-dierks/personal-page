@@ -1049,11 +1049,16 @@ p {
 .cv-html-content td:first-child {
   width: 30%;
   min-width: 0;
-  font-weight: 700;
 }
 
 .cv-html-content td:last-child {
   width: 70%;
+}
+
+/* Side-by-side tables (contact, placement, references) have markup in the
+   first cell; date tables have plain text there. */
+.cv-html-content table:has(td:first-child > *) td {
+  width: 50%;
 }
 
 .cv-html-content a {
