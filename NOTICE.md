@@ -2,6 +2,10 @@
 
 The portrait on the home page (`photo_cropped.webp`, distributed as a release asset) is © Loïc Bourniquel and is not covered by the repository's MIT license.
 
+**Paper and CV**
+
+The job market paper (`jmp.pdf`) and the CV (`cv_konrad_dierks.pdf`, `cv_konrad_dierks.html`), distributed as release assets, are © Konrad Dierks, all rights reserved, and are not covered by the repository's MIT license.
+
 **Third party software notice**
 
 | Name                     | License type | Link                                                     | Author           |
