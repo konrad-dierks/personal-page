@@ -1,3 +1,7 @@
+**Photo credit**
+
+The portrait on the home page (`photo_cropped.webp`, distributed as a release asset) is © Loïc Bourniquel and is not covered by the repository's MIT license.
+
 **Third party software notice**
 
 | Name                     | License type | Link                                                     | Author           |
