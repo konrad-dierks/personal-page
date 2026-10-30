@@ -1,0 +1,462 @@
+---
+import ThemeToggle from "./ThemeToggle.astro"
+
+// Always expanded in the side nav; a click-to-open dropdown in the top bar
+const researchSubpages = [
+  { to: "/job-market-paper/", label: "Job Market Paper" },
+  { to: "/turnout-paper/", label: "Turnout Paper" },
+]
+const researchPages = [
+  { to: "/research/", label: "Overview" },
+  ...researchSubpages,
+]
+---
+
+<aside
+  class="site-side-nav"
+  data-side-nav
+  transition:persist="side-nav"
+  transition:animate="none"
+  hidden
+>
+  <nav class="site-side-nav-nav" aria-label="Primary">
+    <ul class="site-side-nav-list">
+      <li class="site-side-nav-item site-side-nav-item--header">
+        <a href="/">Konrad Dierks</a>
+        <ThemeToggle />
+      </li>
+      <li class="site-side-nav-item">
+        <a href="/cv/" data-nav-link="exact">
+          CV
+        </a>
+      </li>
+      <li class="site-side-nav-item">
+        <a href="/research/" data-nav-link="exact">
+          Research
+        </a>
+        <ul class="site-side-nav-sublist">
+          {researchSubpages.map(({ to, label }) => (
+            <li>
+              <a href={to} data-nav-link="prefix">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+<div
+  class="site-nav-bar site-nav-bar--horizontal"
+  data-nav-bar
+  transition:persist="nav-bar"
+  transition:animate="none"
+>
+  <div class="site-nav-inner">
+    <header class="site-header site-header--bar">
+      <nav class="site-nav" aria-label="Primary" data-nav>
+        <ul class="site-nav-list" data-nav-horizontal>
+          <li class="nav-item nav-item--brand">
+            <a href="/">Konrad Dierks</a>
+          </li>
+          <li class="nav-item nav-item--theme">
+            <ThemeToggle />
+          </li>
+          <li class="nav-item nav-item--page">
+            <a href="/cv/" data-nav-link="exact">
+              CV
+            </a>
+          </li>
+          <li class="nav-item nav-item--page nav-item--dropdown" data-research>
+            <button
+              class="site-nav-dropdown-toggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="site-nav-research-menu-horizontal"
+              data-research-toggle
+            >
+              <span class="site-nav-dropdown-label">Research</span>
+            </button>
+            <ul
+              id="site-nav-research-menu-horizontal"
+              class="site-nav-dropdown site-nav-dropdown--horizontal"
+              hidden
+            >
+              {researchPages.map(({ to, label }) => (
+                <li>
+                  <a href={to} data-nav-link="exact">
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        </ul>
+        <div class="site-nav-mobile" data-nav-mobile hidden>
+          <div class="site-nav-mobile-header">
+            <div class="site-nav-mobile-left">
+              <a class="site-nav-mobile-brand" href="/">
+                Konrad Dierks
+              </a>
+              <ThemeToggle />
+            </div>
+            <button
+              class="site-nav-toggle"
+              type="button"
+              aria-expanded="false"
+              data-menu-toggle
+            >
+              Menu
+            </button>
+          </div>
+          <ul class="site-nav-list site-nav-list--vertical" data-menu hidden>
+            <li class="nav-item nav-item--page">
+              <a href="/cv/" data-nav-link="exact">
+                CV
+              </a>
+            </li>
+            <li
+              class="nav-item nav-item--page nav-item--dropdown"
+              data-research
+            >
+              <button
+                class="site-nav-dropdown-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="site-nav-research-menu-vertical"
+                data-research-toggle
+              >
+                <span class="site-nav-dropdown-label">Research</span>
+              </button>
+              <ul
+                id="site-nav-research-menu-vertical"
+                class="site-nav-dropdown site-nav-dropdown--vertical"
+                hidden
+              >
+                {researchPages.map(({ to, label }) => (
+                  <li>
+                    <a href={to} data-nav-link="exact">
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <ul class="site-nav-list site-nav-list--measure" aria-hidden="true">
+          <li class="nav-item nav-item--brand" data-measure="brand">
+            <a href="/" tabindex="-1">
+              Konrad Dierks
+            </a>
+          </li>
+          <li class="nav-item nav-item--theme" data-measure="theme">
+            <ThemeToggle measure />
+          </li>
+          <li class="nav-item nav-item--page" data-measure="cv">
+            <a href="/cv/" tabindex="-1">
+              CV
+            </a>
+          </li>
+          <li class="nav-item nav-item--page" data-measure="research">
+            <span class="site-nav-dropdown-toggle" aria-hidden="true">
+              Research
+            </span>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  </div>
+</div>
+
+<script>
+  const NAV_FIT_EPSILON = 1
+  const SIDE_NAV_ENTER_BUFFER_PX = 8
+  const SIDE_NAV_EXIT_BUFFER_PX = 8
+  const THEME_KEY = "theme-override"
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)")
+
+  const state = {
+    useSideNav: false,
+    isHorizontal: true,
+    isPortrait: window.innerHeight > window.innerWidth,
+    isAtTop: true,
+    menuOpen: false,
+    researchOpen: false,
+  }
+
+  const $ = selector => document.querySelector(selector)
+  const $$ = selector => Array.from(document.querySelectorAll(selector))
+
+  const getThemeOverride = () => {
+    try {
+      const stored = window.localStorage.getItem(THEME_KEY)
+      return stored === "light" || stored === "dark" ? stored : null
+    } catch {
+      return null
+    }
+  }
+
+  const setThemeOverride = override => {
+    try {
+      if (override) {
+        window.localStorage.setItem(THEME_KEY, override)
+      } else {
+        window.localStorage.removeItem(THEME_KEY)
+      }
+    } catch {}
+  }
+
+  const applyRootAttributes = root => {
+    const override = getThemeOverride()
+    if (override) {
+      root.dataset.theme = override
+    } else {
+      delete root.dataset.theme
+    }
+    if (state.useSideNav) {
+      root.dataset.navMode = "side"
+    } else {
+      delete root.dataset.navMode
+    }
+  }
+
+  const syncThemeToggles = () => {
+    const override = getThemeOverride()
+    const effectiveDark = override ? override === "dark" : darkQuery.matches
+    $$("[data-theme-toggle]").forEach(input => {
+      input.checked = !effectiveDark
+    })
+  }
+
+  const normalizePath = path => path.replace(/\/$/, "")
+
+  const updateActiveLinks = () => {
+    const pathname = normalizePath(window.location.pathname)
+    $$("[data-nav-link]").forEach(link => {
+      const target = normalizePath(new URL(link.href).pathname)
+      const active =
+        link.dataset.navLink === "prefix"
+          ? pathname.startsWith(target)
+          : pathname === target
+      link.classList.toggle("site-nav-link--active", active)
+    })
+    const researchActive = $$("[data-nav-bar] [data-nav-link]").some(
+      link =>
+        link.classList.contains("site-nav-link--active") &&
+        link.closest("[data-research]")
+    )
+    $$("[data-research-toggle]").forEach(toggle => {
+      toggle.classList.toggle("site-nav-link--active", researchActive)
+    })
+  }
+
+  const render = () => {
+    const bar = $("[data-nav-bar]")
+    if (!bar) {
+      return
+    }
+    const { useSideNav, isHorizontal, isPortrait, isAtTop } = state
+
+    $("[data-side-nav]").hidden = !useSideNav
+    bar.hidden = useSideNav
+    bar.classList.toggle("site-nav-bar--hidden", isPortrait && !isAtTop)
+    bar.classList.toggle("site-nav-bar--horizontal", isHorizontal)
+    bar.classList.toggle("site-nav-bar--vertical", !isHorizontal)
+    $("[data-nav-horizontal]").hidden = !isHorizontal
+    $("[data-nav-mobile]").hidden = isHorizontal
+    $("[data-menu]").hidden = !state.menuOpen
+    const menuToggle = $("[data-menu-toggle]")
+    menuToggle.textContent = state.menuOpen ? "Close" : "Menu"
+    menuToggle.setAttribute("aria-expanded", String(state.menuOpen))
+
+    $$("[data-research]").forEach(item => {
+      item.querySelector("ul").hidden = !state.researchOpen
+      item
+        .querySelector("[data-research-toggle]")
+        .setAttribute("aria-expanded", String(state.researchOpen))
+    })
+
+    applyRootAttributes(document.documentElement)
+  }
+
+  // Menus close whenever the navigation mode or the mobile menu changes
+  const setState = patch => {
+    const modeChanged = ["isHorizontal", "useSideNav", "menuOpen"].some(
+      key => key in patch && patch[key] !== state[key]
+    )
+    Object.assign(state, patch)
+    if (modeChanged) {
+      state.researchOpen = false
+    }
+    render()
+  }
+
+  const closeMenus = () => setState({ menuOpen: false, researchOpen: false })
+
+  const updateNavLayout = () => {
+    const shell = $(".site-shell")
+    if (!shell) {
+      return
+    }
+
+    const isLandscape = window.innerWidth > window.innerHeight
+    const isPortrait = !isLandscape
+    const root = document.documentElement
+    const rootStyle = window.getComputedStyle(root)
+    const shellStyle = window.getComputedStyle(shell)
+    // Use the full text width, independent of the current navigation mode.
+    // Both outer margins and the shell's horizontal padding are available.
+    const contentWidth =
+      Number.parseFloat(shellStyle.maxWidth) -
+      Number.parseFloat(shellStyle.paddingLeft) -
+      Number.parseFloat(shellStyle.paddingRight)
+    const remainingWidth = root.clientWidth - contentWidth
+    const sideNavBaseThreshold =
+      Number.parseFloat(rootStyle.getPropertyValue("--side-nav-width")) +
+      Number.parseFloat(rootStyle.getPropertyValue("--side-nav-gap"))
+    const sideNavEnterThreshold =
+      sideNavBaseThreshold + SIDE_NAV_ENTER_BUFFER_PX
+    const sideNavExitThreshold = sideNavBaseThreshold - SIDE_NAV_EXIT_BUFFER_PX
+    const canUseSideNav =
+      isLandscape &&
+      (state.useSideNav
+        ? remainingWidth >= sideNavExitThreshold
+        : remainingWidth >= sideNavEnterThreshold)
+
+    if (canUseSideNav) {
+      setState({
+        isPortrait,
+        useSideNav: true,
+        isHorizontal: true,
+        menuOpen: false,
+      })
+      return
+    }
+
+    const leavingSideNav = state.useSideNav
+    setState({
+      isPortrait,
+      useSideNav: false,
+      isHorizontal: isPortrait ? false : state.isHorizontal,
+    })
+    if (isPortrait) {
+      return
+    }
+
+    const getWidth = name =>
+      $(`[data-measure="${name}"]`)?.getBoundingClientRect().width ?? 0
+    const navWidth = $("[data-nav]")?.getBoundingClientRect().width ?? 0
+    const requiredWidth = getWidth("brand") + getWidth("theme")
+    const pageButtonsWidth = getWidth("cv") + getWidth("research")
+
+    if (navWidth <= 0 || requiredWidth <= 0 || pageButtonsWidth <= 0) {
+      return
+    }
+
+    const horizontal =
+      pageButtonsWidth <= navWidth - requiredWidth - NAV_FIT_EPSILON
+    setState({
+      isHorizontal: horizontal,
+      menuOpen: horizontal ? false : state.menuOpen,
+    })
+    if (leavingSideNav) {
+      window.requestAnimationFrame(updateNavLayout)
+    }
+  }
+
+  const handleScroll = () => {
+    const atTop = window.scrollY <= 4
+    setState({ isAtTop: atTop })
+    if (state.isPortrait && !atTop) {
+      closeMenus()
+    }
+  }
+
+  document.addEventListener("click", event => {
+    const target = event.target
+    if (!(target instanceof Element)) {
+      return
+    }
+    if (target.closest("[data-research-toggle]")) {
+      setState({ researchOpen: !state.researchOpen })
+    } else if (target.closest("[data-menu-toggle]")) {
+      setState({ menuOpen: !state.menuOpen })
+    } else if (target.closest("[data-nav-bar] a, [data-side-nav] a")) {
+      closeMenus()
+    }
+  })
+
+  document.addEventListener("change", event => {
+    const target = event.target
+    if (
+      !(target instanceof HTMLInputElement) ||
+      !target.hasAttribute("data-theme-toggle")
+    ) {
+      return
+    }
+    const nextDark = !target.checked
+    setThemeOverride(
+      nextDark === darkQuery.matches ? null : nextDark ? "dark" : "light"
+    )
+    applyRootAttributes(document.documentElement)
+    syncThemeToggles()
+  })
+
+  const closeResearchOutside = event => {
+    if (!state.researchOpen || !(event.target instanceof Element)) {
+      return
+    }
+    if (!event.target.closest("[data-research]")) {
+      setState({ researchOpen: false })
+    }
+  }
+  document.addEventListener("mousedown", closeResearchOutside)
+  document.addEventListener("touchstart", closeResearchOutside)
+  window.addEventListener("keydown", event => {
+    if (event.key === "Escape" && state.researchOpen) {
+      setState({ researchOpen: false })
+    }
+  })
+
+  darkQuery.addEventListener("change", syncThemeToggles)
+  window.addEventListener("resize", updateNavLayout)
+  window.addEventListener("scroll", handleScroll, { passive: true })
+  document.fonts?.ready.then(updateNavLayout)
+
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(updateNavLayout)
+    ;[
+      "[data-nav]",
+      ...["brand", "theme", "cv", "research"].map(
+        name => `[data-measure="${name}"]`
+      ),
+    ].forEach(selector => {
+      const node = $(selector)
+      if (node) {
+        observer.observe(node)
+      }
+    })
+  }
+
+  // ClientRouter replaces the <html> attributes on every swap
+  document.addEventListener("astro:before-swap", event => {
+    applyRootAttributes(event.newDocument.documentElement)
+  })
+  document.addEventListener("astro:after-swap", () => {
+    applyRootAttributes(document.documentElement)
+  })
+  document.addEventListener("astro:page-load", () => {
+    updateActiveLinks()
+    syncThemeToggles()
+    closeMenus()
+    updateNavLayout()
+    handleScroll()
+  })
+
+  updateActiveLinks()
+  syncThemeToggles()
+  updateNavLayout()
+  handleScroll()
+</script>

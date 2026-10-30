@@ -1,4 +1,4 @@
-Source code for my personal page, [https://www.konraddierks.eu/](https://www.konraddierks.eu/), built with [Gatsby](https://www.gatsbyjs.com).
+Source code for my personal page, [https://www.konraddierks.eu/](https://www.konraddierks.eu/), built with [Astro](https://astro.build).
 
 The site includes my CV, an overview of my research, a page for my job market paper, and a page with bonus content (interactive plots) for
 
@@ -6,10 +6,10 @@ Konrad Dierks, Ingela Alger, and Jean-François Laslier, Does universalization e
 
 ## Development
 
-- `yarn install`, then `yarn develop` for a local preview
+- `yarn install`, then `yarn dev` for a local preview (requires Node 22.23.4 or newer)
 - `yarn format` to format the code with Prettier
 
-The site is deployed to GitHub Pages by the workflow in `.github/workflows/gatsby.yml` on every push to the `source` branch. The portrait photo, the job market paper and the CV are not tracked in git: the workflow downloads them into `static/` from the `assets` release.
+The site is deployed to GitHub Pages by the workflow in `.github/workflows/deploy.yml` on every push to the `source` branch. The portrait photo, the job market paper and the CV are not tracked in git: the workflow downloads them into `static/` from the `assets` release.
 
 ## Credits and licenses
 

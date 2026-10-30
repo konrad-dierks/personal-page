@@ -1,0 +1,26 @@
+---
+import { MoonIcon, SunIcon } from "@sanity/icons"
+
+const { measure = false } = Astro.props
+---
+
+{measure ? (
+  <div class="theme-toggle theme-toggle--measure" aria-hidden="true">
+    <MoonIcon className="theme-toggle__icon" aria-hidden="true" />
+    <span class="theme-toggle__switch">
+      <span class="theme-toggle__track" />
+      <span class="theme-toggle__thumb" />
+    </span>
+    <SunIcon className="theme-toggle__icon" aria-hidden="true" />
+  </div>
+) : (
+  <div class="theme-toggle" aria-label="Theme toggle">
+    <MoonIcon className="theme-toggle__icon" aria-hidden="true" />
+    <label class="theme-toggle__switch">
+      <input type="checkbox" data-theme-toggle aria-label="Toggle theme" />
+      <span class="theme-toggle__track" />
+      <span class="theme-toggle__thumb" />
+    </label>
+    <SunIcon className="theme-toggle__icon" aria-hidden="true" />
+  </div>
+)}

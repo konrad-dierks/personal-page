@@ -8,7 +8,7 @@ import {
   TurnoutPaperAbstract,
   TurnoutPaperFunding,
   TurnoutPaperPresentations,
-} from "./papers"
+} from "./papers.jsx"
 
 const tabHashes = ["overview", "tab1", "tab2"]
 const hashToIndex = hash => {
@@ -38,9 +38,23 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
       }
     }
 
+    // The client router pushes in-page links with pushState, which fires no
+    // hashchange, so also sync after clicks and on history traversal
+    const syncAfterClick = event => {
+      if (event.target.closest?.("a[href^='#']")) {
+        window.setTimeout(syncFromHash, 0)
+      }
+    }
+
     syncFromHash()
     window.addEventListener("hashchange", syncFromHash)
-    return () => window.removeEventListener("hashchange", syncFromHash)
+    window.addEventListener("popstate", syncFromHash)
+    document.addEventListener("click", syncAfterClick)
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash)
+      window.removeEventListener("popstate", syncFromHash)
+      document.removeEventListener("click", syncAfterClick)
+    }
   }, [defaultTab])
 
   const handleTabSelect = index => {

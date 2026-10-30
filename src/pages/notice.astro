@@ -1,0 +1,159 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro"
+
+const tableStyle =
+  "border-collapse: separate; border-spacing: 0 8px; width: 100%"
+const cellStyle = "padding-right: 16px; vertical-align: top"
+const headerStyle = `${cellStyle}; text-align: left`
+const mainPackages = [
+  {
+    name: "astro",
+    license: "MIT",
+    link: "https://github.com/withastro/astro.git",
+    author: "withastro",
+  },
+  {
+    name: "@astrojs/react",
+    license: "MIT",
+    link: "https://github.com/withastro/astro.git",
+    author: "withastro",
+  },
+  {
+    name: "react",
+    license: "MIT",
+    link: "https://github.com/facebook/react.git",
+    author: "Meta Platforms, Inc",
+  },
+  {
+    name: "react-dom",
+    license: "MIT",
+    link: "https://github.com/facebook/react.git",
+    author: "Meta Platforms, Inc",
+  },
+  {
+    name: "node-html-parser",
+    license: "MIT",
+    link: "https://github.com/taoqf/node-fast-html-parser.git",
+    author: "Xiaoyi Shi",
+  },
+  {
+    name: "@fontsource-variable/source-sans-3",
+    license: "OFL-1.1",
+    link: "https://github.com/fontsource/fontsource.git",
+    author: "Fontsource",
+  },
+  {
+    name: "@fontsource/libertinus-serif",
+    license: "OFL-1.1",
+    link: "https://github.com/fontsource/font-files.git",
+    author: "Fontsource",
+  },
+  {
+    name: "@sanity/icons",
+    license: "MIT",
+    link: "https://github.com/sanity-io/icons",
+    author: "Sanity.io",
+  },
+  {
+    name: "prettier",
+    license: "MIT",
+    link: "https://github.com/prettier/prettier.git",
+    author: "James Long",
+  },
+  {
+    name: "prettier-plugin-astro",
+    license: "MIT",
+    link: "https://github.com/withastro/prettier-plugin-astro.git",
+    author: "withastro",
+  },
+]
+
+const plotPackages = [
+  {
+    name: "flo-poly",
+    license: "MIT",
+    link: "https://github.com/FlorisSteenkamp/FloPoly.git",
+    author: "Floris Steenkamp",
+  },
+  {
+    name: "plotly.js-basic-dist-min",
+    license: "MIT",
+    link: "https://github.com/plotly/plotly.js.git",
+    author: "Plotly, Inc.",
+  },
+  {
+    name: "react-plotly.js",
+    license: "MIT",
+    link: "https://github.com/plotly/react-plotly.js.git",
+    author: "Plotly, Inc.",
+  },
+  {
+    name: "react-latex-next",
+    license: "MIT",
+    link: "https://github.com/harunurhan/react-latex-next.git",
+    author: "harunurhan",
+  },
+  {
+    name: "react-tabs",
+    license: "MIT",
+    link: "https://github.com/reactjs/react-tabs.git",
+    author: "Matt Zabriskie",
+  },
+]
+---
+
+<SiteLayout title="Third party package notice">
+  <div>
+    <h1>Third party package notice</h1>
+    <h2>Main site packages</h2>
+    <table style={tableStyle}>
+      <thead>
+        <tr>
+          <th style={headerStyle}>Name</th>
+          <th style={headerStyle}>License type</th>
+          <th style={headerStyle}>Link</th>
+          <th style={headerStyle}>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        {mainPackages.map(pkg => (
+          <tr>
+            <td style={cellStyle}>{pkg.name}</td>
+            <td style={cellStyle}>{pkg.license}</td>
+            <td style={cellStyle}>
+              <a href={pkg.link} target="_blank" rel="noopener noreferrer">
+                Link
+              </a>
+            </td>
+            <td style={cellStyle}>{pkg.author}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <h2>Additional packages used for plots</h2>
+    <table style={tableStyle}>
+      <thead>
+        <tr>
+          <th style={headerStyle}>Name</th>
+          <th style={headerStyle}>License type</th>
+          <th style={headerStyle}>Link</th>
+          <th style={headerStyle}>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        {plotPackages.map(pkg => (
+          <tr>
+            <td style={cellStyle}>{pkg.name}</td>
+            <td style={cellStyle}>{pkg.license}</td>
+            <td style={cellStyle}>
+              <a href={pkg.link} target="_blank" rel="noopener noreferrer">
+                Link
+              </a>
+            </td>
+            <td style={cellStyle}>{pkg.author}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</SiteLayout>

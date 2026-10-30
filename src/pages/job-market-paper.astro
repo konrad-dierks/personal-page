@@ -1,0 +1,38 @@
+---
+import { DocumentPdfIcon } from "@sanity/icons"
+import SiteLayout from "../layouts/SiteLayout.astro"
+import {
+  JobMarketPaperAbstract,
+  JobMarketPaperFunding,
+  JobMarketPaperPresentations,
+} from "../components/papers.jsx"
+---
+
+<SiteLayout
+  title="Job Market Paper"
+  pageIcon="jmp"
+  faviconLight="/favicon-jmp-light-v4.svg"
+  faviconDark="/favicon-jmp-dark-v4.svg"
+>
+  <header class="appendix-header">
+    <h1>
+      Is a 100% renewable electricity mix cost-efficient under weather
+      uncertainty?
+    </h1>
+    <h2 class="appendix-subtitle">Job Market Paper</h2>
+  </header>
+  <p>
+    <a
+      class="pdf-button"
+      href="/jmp.pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <DocumentPdfIcon className="pdf-button-icon" aria-hidden="true" />
+      <span>Paper (PDF)</span>
+    </a>
+  </p>
+  <JobMarketPaperAbstract />
+  <JobMarketPaperPresentations />
+  <JobMarketPaperFunding />
+</SiteLayout>

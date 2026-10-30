@@ -1,0 +1,107 @@
+---
+import fs from "node:fs"
+import path from "node:path"
+import { parse } from "node-html-parser"
+import { DocumentPdfIcon } from "@sanity/icons"
+import "@fontsource/libertinus-serif/400.css"
+import "@fontsource/libertinus-serif/700.css"
+import SiteLayout from "../layouts/SiteLayout.astro"
+
+const pdfHref = "/cv_konrad_dierks.pdf"
+const researchHref = "/research/"
+
+const extractBodyHtml = html => {
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
+  return bodyMatch ? bodyMatch[1].trim() : html
+}
+
+const normalizeHeading = text => text.replace(/\s+/g, " ").trim().toLowerCase()
+
+const escapeHtml = text =>
+  text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
+const injectResearchLink = root => {
+  const researchHeading = root
+    .querySelectorAll("h1, h2, h3, h4, h5, h6")
+    .find(heading => normalizeHeading(heading.text) === "research interests")
+
+  if (!researchHeading) {
+    return
+  }
+
+  const existingLink = researchHeading.querySelector("a")
+  if (existingLink && /research/i.test(existingLink.text)) {
+    existingLink.setAttribute("href", researchHref)
+    return
+  }
+
+  const rawText = researchHeading.text
+  const match = rawText.match(/\bresearch\b/i)
+  if (!match || match.index === undefined) {
+    return
+  }
+
+  const before = rawText.slice(0, match.index)
+  const after = rawText.slice(match.index + match[0].length)
+  researchHeading.innerHTML = `${escapeHtml(before)}<a href="${researchHref}">${escapeHtml(match[0])}</a>${escapeHtml(after)}`
+}
+
+const ownSiteHost = /^(www\.)?konraddierks\.eu$/i
+
+// Links back to this site become root-relative, so the client router handles
+// them; links to other sites open in a new tab
+const fixLinks = root => {
+  root.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href") ?? ""
+    if (!/^https?:/i.test(href)) {
+      return
+    }
+    let url
+    try {
+      url = new URL(href)
+    } catch {
+      return
+    }
+    if (ownSiteHost.test(url.hostname)) {
+      link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`)
+    } else {
+      link.setAttribute("target", "_blank")
+      link.setAttribute("rel", "noopener noreferrer")
+    }
+  })
+}
+
+let cvHtml = ""
+try {
+  const cvHtmlPath = path.join(process.cwd(), "static", "cv_konrad_dierks.html")
+  const root = parse(extractBodyHtml(fs.readFileSync(cvHtmlPath, "utf8")))
+  injectResearchLink(root)
+  fixLinks(root)
+  cvHtml = root.toString()
+} catch (error) {
+  console.warn("[cv] Could not load static/cv_konrad_dierks.html", error)
+}
+---
+
+<SiteLayout title="CV">
+  <section class="cv-section">
+    <header class="cv-header">
+      <h1>Curriculum Vitae</h1>
+      <a class="pdf-button" href={pdfHref} download>
+        <DocumentPdfIcon className="pdf-button-icon" aria-hidden="true" />
+        <span>Download PDF</span>
+      </a>
+    </header>
+    {cvHtml ? (
+      <section class="cv-html-content" set:html={cvHtml} />
+    ) : (
+      <p>
+        The HTML CV could not be loaded. You can still use{" "}
+        <a href={pdfHref} download>
+          Download PDF
+        </a>
+        .
+      </p>
+    )}
+  </section>
+</SiteLayout>

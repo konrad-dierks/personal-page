@@ -1,4 +1,4 @@
-import Plot from "./LoadablePlot.js"
+import Plot from "./LoadablePlot"
 import React, { useState, useEffect } from "react"
 import { computeConsistentStrategyData, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"

@@ -5,12 +5,13 @@
   "version": "1.0.0",
   "author": "Konrad Dierks <konrad.dierks@ecomail.fr>",
   "dependencies": {
+    "@astrojs/react": "^7.1.2",
     "@fontsource-variable/source-sans-3": "^5.3.0",
     "@fontsource/libertinus-serif": "^5.3.0",
-    "@loadable/component": "^5.16.4",
     "@sanity/icons": "^3.7.4",
+    "astro": "^7.4.4",
     "flo-poly": "^7.0.0",
-    "gatsby": "^5.16.1",
+    "node-html-parser": "^9.0.5",
     "plotly.js-basic-dist-min": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -19,18 +20,19 @@
     "react-tabs": "^6.1.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.8"
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.23.4"
   },
   "license": "MIT",
   "scripts": {
-    "build": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby build",
-    "develop": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
-    "start": "NODE_OPTIONS=--disable-warning=DEP0040 gatsby develop",
-    "clean": "gatsby clean"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,astro}\""
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,64 @@
+---
+import { ClientRouter } from "astro:transitions"
+import "@fontsource-variable/source-sans-3"
+import "../components/layout.css"
+import SiteNav from "../components/SiteNav.astro"
+import SiteFooter from "../components/SiteFooter.astro"
+
+const {
+  title,
+  description = "Personal page",
+  pageIcon = null,
+  faviconLight = "/favicon-light-v5.svg",
+  faviconDark = "/favicon-dark-v5.svg",
+} = Astro.props
+const author = "Konrad Dierks"
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem("theme-override")
+        if (theme === "light" || theme === "dark") {
+          document.documentElement.dataset.theme = theme
+        }
+      } catch {}
+    </script>
+    <title>{title} | {author}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content={author} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={faviconLight}
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={faviconDark}
+      media="(prefers-color-scheme: dark)"
+    />
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body>
+    <SiteNav />
+    <div class="site-shell">
+      <main>
+        <slot />
+      </main>
+      <SiteFooter pageIcon={pageIcon} />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro"
+import AppendixTabs from "../components/AppendixTabs.jsx"
+---
+
+<SiteLayout
+  title="Turnout Paper"
+  pageIcon="turnout"
+  faviconLight="/favicon-turnout-light-v2.svg"
+  faviconDark="/favicon-turnout-dark-v2.svg"
+>
+  <header class="appendix-header">
+    <h1>
+      Does universalization ethics justify participation in large elections?
+    </h1>
+    <h2 class="appendix-subtitle">Bonus content</h2>
+  </header>
+  <AppendixTabs defaultTab={0} client:load />
+</SiteLayout>
