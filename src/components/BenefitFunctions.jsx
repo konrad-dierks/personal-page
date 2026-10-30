@@ -1,66 +1,38 @@
 import Plot, { toPoints } from "./LoadablePlot"
-import React, { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { h, h_gamma } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
-import usePrefersDark from "./usePrefersDark"
+import usePlotTheme from "./usePlotTheme"
 import SliderControl from "./SliderControl"
 
-const ConsistentStrategies = () => {
+const xValues = Array.from({ length: 300 }, (_, i) => -1 + (i * 2) / 299)
+
+const BenefitFunctions = () => {
   const [m, setM] = useState(1)
   const [gamma, setGamma] = useState(1)
-  const [mData, setmData] = useState({ x: [], y: [] })
-  const [gammaData, setGammaData] = useState({ x: [], y: [] })
-  const prefersDark = usePrefersDark()
+  const { colors, axis, legend } = usePlotTheme()
 
-  useEffect(() => {
-    const make_h_m = () => {
-      const x_vec = Array.from({ length: 300 }, (_, i) => -1 + (i * 2) / 299)
-      const y_vec = x_vec.map(x => h(x, m))
-      setmData({ x: x_vec, y: y_vec })
-    }
-    make_h_m()
-  }, [m])
-
-  useEffect(() => {
-    const make_h_gamma = () => {
-      const x_vec = Array.from({ length: 300 }, (_, i) => -1 + (i * 2) / 299)
-      const y_vec = x_vec.map(x => h_gamma(x, gamma))
-      setGammaData({ x: x_vec, y: y_vec })
-    }
-    make_h_gamma()
-  }, [gamma])
-
-  const plotTheme = prefersDark
-    ? {
-        text: "#f2f2f2",
-        axisLine: "rgba(255, 255, 255, 0.35)",
-        grid: "rgba(255, 255, 255, 0.12)",
-        traceA: "#c77dff",
-        traceB: "#7fd6c6",
-      }
-    : {
-        text: "#333333",
-        axisLine: "rgba(0, 0, 0, 0.25)",
-        grid: "rgba(0, 0, 0, 0.12)",
-        traceA: "#440154",
-        traceB: "#2e8f7a",
-      }
-
-  const axisOptions = {
-    ticks: { color: plotTheme.text },
-    border: { color: plotTheme.axisLine },
-    grid: {
-      color: context =>
-        context.tick?.value === 0 ? plotTheme.axisLine : plotTheme.grid,
-    },
-  }
+  const mPoints = useMemo(
+    () =>
+      toPoints(
+        xValues,
+        xValues.map(x => h(x, m))
+      ),
+    [m]
+  )
+  const gammaPoints = useMemo(
+    () =>
+      toPoints(
+        xValues,
+        xValues.map(x => h_gamma(x, gamma))
+      ),
+    [gamma]
+  )
 
   const chartOptions = {
-    plugins: {
-      legend: { position: "top", labels: { color: plotTheme.text } },
-    },
-    scales: { x: axisOptions, y: axisOptions },
+    plugins: { legend },
+    scales: { x: axis(), y: axis() },
   }
 
   const lineDataset = (label, points, color) => ({
@@ -74,12 +46,8 @@ const ConsistentStrategies = () => {
 
   const chartData = {
     datasets: [
-      lineDataset("h₁(x,m)", toPoints(mData.x, mData.y), plotTheme.traceA),
-      lineDataset(
-        "h₂(x,γ)",
-        toPoints(gammaData.x, gammaData.y),
-        plotTheme.traceB
-      ),
+      lineDataset("h₁(x,m)", mPoints, colors.traceA),
+      lineDataset("h₂(x,γ)", gammaPoints, colors.traceB),
     ],
   }
 
@@ -91,6 +59,7 @@ const ConsistentStrategies = () => {
             data={chartData}
             options={chartOptions}
             className="plot-main-chart"
+            label="Plot comparing the benefit functions h₁(x, m) and h₂(x, γ) for x from −1 to 1"
           />
         </div>
         <div className="plot-controls">
@@ -146,4 +115,4 @@ const ConsistentStrategies = () => {
   )
 }
 
-export default ConsistentStrategies
+export default BenefitFunctions

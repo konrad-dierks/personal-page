@@ -82,13 +82,6 @@ const scaledDistance = (first, second, xStep, yStep) => {
   return Math.hypot(dx, dy)
 }
 
-const estimateCurveSteps = (points, xFallback, yFallback) => {
-  return {
-    xStep: Math.max(xFallback, 1e-12),
-    yStep: Math.max(yFallback, 1e-12),
-  }
-}
-
 const dedupePoints = (points, xStep, yStep) => {
   const seen = new Map()
   const dedupeX = Math.max(xStep / 2, 1e-12)
@@ -350,23 +343,15 @@ const decomposeComponentPaths = (points, edges) => {
   return { lines, scatter }
 }
 
-const classifyPointCloud = (points, xStep, yStep) => {
-  const estimatedSteps = estimateCurveSteps(points, xStep, yStep)
-  const deduped = dedupePoints(
-    points,
-    estimatedSteps.xStep,
-    estimatedSteps.yStep
-  )
+const classifyPointCloud = (points, gridXStep, gridYStep) => {
+  const xStep = Math.max(gridXStep, 1e-12)
+  const yStep = Math.max(gridYStep, 1e-12)
+  const deduped = dedupePoints(points, xStep, yStep)
   if (deduped.length === 0) {
     return { x: [], y: [], scatter: { x: [], y: [] }, lines: [] }
   }
 
-  const adjacency = buildAdjacency(
-    deduped,
-    estimatedSteps.xStep,
-    estimatedSteps.yStep,
-    LINE_TOLERANCE
-  )
+  const adjacency = buildAdjacency(deduped, xStep, yStep, LINE_TOLERANCE)
   const components = findConnectedComponents(adjacency)
   const lines = []
   const scatter = []
@@ -383,8 +368,8 @@ const classifyPointCloud = (points, xStep, yStep) => {
     const edges = buildMinimumSpanningTree(
       componentPoints,
       componentAdjacency,
-      estimatedSteps.xStep,
-      estimatedSteps.yStep
+      xStep,
+      yStep
     )
 
     if (edges.length === 0) {
@@ -606,4 +591,4 @@ const computeConsistentStrategyData = params => {
   return { data, data2 }
 }
 
-export { computeConsistentStrategyData, findGroupBrAVecB, h, CostFun, h_gamma }
+export { computeConsistentStrategyData, h, CostFun, h_gamma }

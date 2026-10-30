@@ -1,55 +1,59 @@
 import Plot, { toPoints } from "./LoadablePlot"
-import React, { useState, useEffect } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { computeConsistentStrategyData, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
-import usePrefersDark from "./usePrefersDark"
+import usePlotTheme from "./usePlotTheme"
 import SliderControl from "./SliderControl"
 
+const emptyStrategyData = {
+  x: [],
+  y: [],
+  scatter: { x: [], y: [] },
+  lines: [],
+}
+
+const linspace = (start, end, count) =>
+  Array.from(
+    { length: count },
+    (_, i) => start + ((end - start) * i) / (count - 1)
+  )
+
+// All datasets of one kind share a label, so they form one legend entry
+const buildStrategyDatasets = (plotData, label, color, useLineRendering) => {
+  const markers = (points, radius) => ({
+    label,
+    data: points,
+    showLine: false,
+    backgroundColor: color,
+    borderColor: color,
+    pointRadius: radius,
+    pointBorderWidth: 0,
+    // Only drawn as the legend line
+    borderWidth: 2,
+  })
+
+  if (!useLineRendering) {
+    return [markers(toPoints(plotData.x, plotData.y), 2)]
+  }
+
+  const datasets = plotData.lines.map(line => ({
+    label,
+    data: toPoints(line.x, line.y),
+    borderColor: color,
+    backgroundColor: color,
+    borderWidth: 2,
+    pointRadius: 0,
+  }))
+
+  if (plotData.scatter.x.length > 0) {
+    datasets.push(markers(toPoints(plotData.scatter.x, plotData.scatter.y), 1))
+  }
+
+  return datasets
+}
+
 const ConsistentStrategies = () => {
-  const emptyStrategyData = {
-    x: [],
-    y: [],
-    scatter: { x: [], y: [] },
-    lines: [],
-  }
-
-  // All datasets of one kind share a label, so they form one legend entry
-  const buildStrategyDatasets = (plotData, label, color, useLineRendering) => {
-    const markers = (points, radius) => ({
-      label,
-      data: points,
-      showLine: false,
-      backgroundColor: color,
-      borderColor: color,
-      pointRadius: radius,
-      pointBorderWidth: 0,
-      // Only drawn as the legend line
-      borderWidth: 2,
-    })
-
-    if (!useLineRendering) {
-      return [markers(toPoints(plotData.x, plotData.y), 2)]
-    }
-
-    const datasets = plotData.lines.map(line => ({
-      label,
-      data: toPoints(line.x, line.y),
-      borderColor: color,
-      backgroundColor: color,
-      borderWidth: 2,
-      pointRadius: 0,
-    }))
-
-    if (plotData.scatter.x.length > 0) {
-      datasets.push(
-        markers(toPoints(plotData.scatter.x, plotData.scatter.y), 1)
-      )
-    }
-
-    return datasets
-  }
-
   const [m, setM] = useState(1)
   const [theA, setTheA] = useState(1)
   const [theB, setTheB] = useState(1)
@@ -63,152 +67,80 @@ const ConsistentStrategies = () => {
   const [data, setData] = useState(emptyStrategyData)
   const [data2, setData2] = useState(emptyStrategyData)
   const [showRefinedStrategies, setShowRefinedStrategies] = useState(false)
-  const [abline, setAbline] = useState({ x: [], y: [] })
-  const [benefit, setBenefit] = useState({ x: [], y: [] })
-  const [cost, setCost] = useState({ x: [], y: [] })
-  const [CDF, setCDF] = useState({ x: [], y: [] })
-  const prefersDark = usePrefersDark()
+  const { colors, axis, legend } = usePlotTheme()
+  const workerRef = useRef(null)
+  const requestId = useRef(0)
 
+  // The refined strategies can take a few hundred milliseconds on slow
+  // devices, so they are computed in a worker to keep the page responsive
   useEffect(() => {
-    const makeabline = () => {
-      const x = [Math.max(a0, b0), Math.min(a0 + av, b0 + bv)]
-
-      setAbline({ x, y: x })
+    const worker = new Worker(new URL("./strategyWorker.js", import.meta.url), {
+      type: "module",
+    })
+    worker.onmessage = ({ data: result }) => {
+      // Results for parameters that have changed since are dropped
+      if (result.id === requestId.current) {
+        setData(result.data)
+        setData2(result.data2)
+        setShowRefinedStrategies(true)
+      }
     }
-    makeabline()
-  }, [a0, av, b0, bv])
+    workerRef.current = worker
+    return () => worker.terminate()
+  }, [])
 
+  // A coarse pass right away, and a refined one once the parameters have
+  // stayed the same for 200 ms
   useEffect(() => {
+    const params = { m, theA, theB, rho, kap, k, a0, av, b0, bv }
+    const id = ++requestId.current
     const coarseData = computeConsistentStrategyData({
-      m,
-      theA,
-      theB,
-      rho,
-      kap,
-      k,
-      a0,
-      av,
-      b0,
-      bv,
+      ...params,
       resolution: 30,
     })
-
     setData(coarseData.data)
     setData2(coarseData.data2)
     setShowRefinedStrategies(false)
 
     const timeoutId = setTimeout(() => {
-      const refinedData = computeConsistentStrategyData({
-        m,
-        theA,
-        theB,
-        rho,
-        kap,
-        k,
-        a0,
-        av,
-        b0,
-        bv,
-        resolution: 1000,
+      workerRef.current?.postMessage({
+        id,
+        params: { ...params, resolution: 1000 },
       })
-
-      setData(refinedData.data)
-      setData2(refinedData.data2)
-      setShowRefinedStrategies(true)
     }, 200)
-
     return () => clearTimeout(timeoutId)
-  }, [m, theA, kap, a0, av, b0, bv, theB, rho, k])
+  }, [m, theA, theB, rho, kap, k, a0, av, b0, bv])
 
-  useEffect(() => {
-    const calculateBenefit = () => {
-      const alphavec = Array.from({ length: 200 }, (_, i) => -1 + (i * 2) / 199)
-      const benefit = alphavec.map(alpha => h(alpha, m))
+  const abline = useMemo(() => {
+    const x = [Math.max(a0, b0), Math.min(a0 + av, b0 + bv)]
+    return { x, y: x }
+  }, [a0, av, b0, bv])
 
-      setBenefit({ x: alphavec, y: benefit })
-    }
-    calculateBenefit()
+  const benefit = useMemo(() => {
+    const x = linspace(-1, 1, 200)
+    return { x, y: x.map(alpha => h(alpha, m)) }
   }, [m])
 
-  useEffect(() => {
-    const calculateCostFunction = () => {
-      const Avec = Array.from({ length: 200 }, (_, i) => a0 + (i * av) / 199)
-
-      const cost = Avec.map(a => CostFun(theA, a0, a, av, k))
-
-      setCost({ x: Avec, y: cost })
-    }
-
-    calculateCostFunction()
+  const cost = useMemo(() => {
+    const x = linspace(a0, a0 + av, 200)
+    return { x, y: x.map(a => CostFun(theA, a0, a, av, k)) }
   }, [a0, av, theA, k])
 
-  useEffect(() => {
-    const calculateCostCDF = () => {
-      const xVec = Array.from({ length: 200 }, (_, i) => (i * theA) / 199)
-
-      const cdf = xVec.map(x => Math.pow(x / theA, 1 / k))
-
-      setCDF({ x: xVec, y: cdf })
-    }
-    calculateCostCDF()
+  const CDF = useMemo(() => {
+    const x = linspace(0, theA, 200)
+    return { x, y: x.map(value => (value / theA) ** (1 / k)) }
   }, [theA, k])
-
-  const plotTheme = prefersDark
-    ? {
-        text: "#f2f2f2",
-        axisLine: "rgba(255, 255, 255, 0.35)",
-        grid: "rgba(255, 255, 255, 0.12)",
-        traceA: "#c77dff",
-        traceB: "#7fd6c6",
-        line: "#f2f2f2",
-      }
-    : {
-        text: "#333333",
-        axisLine: "rgba(0, 0, 0, 0.25)",
-        grid: "rgba(0, 0, 0, 0.12)",
-        traceA: "#440154",
-        traceB: "#2e8f7a",
-        line: "#000000",
-      }
-
-  const axisOptions = {
-    ticks: { color: plotTheme.text },
-    border: { color: plotTheme.axisLine },
-    grid: {
-      color: context =>
-        context.tick?.value === 0 ? plotTheme.axisLine : plotTheme.grid,
-    },
-  }
-
-  const axisTitle = text => ({
-    display: true,
-    text,
-    color: plotTheme.text,
-    font: { size: 12 },
-  })
 
   const smallChartOptions = {
     plugins: { legend: { display: false } },
-    scales: { x: axisOptions, y: axisOptions },
+    scales: { x: axis(), y: axis() },
   }
 
   const strategyChartOptions = {
-    plugins: {
-      legend: { position: "top", labels: { color: plotTheme.text } },
-    },
+    plugins: { legend },
     scales: {
-      x: {
-        ...axisOptions,
-        min: a0 - 0.0025 * av,
-        max: a0 + 1.0025 * av,
-        title: axisTitle("a"),
-      },
-      y: {
-        ...axisOptions,
-        min: b0 - 0.0025 * bv,
-        max: b0 + 1.0025 * bv,
-        title: axisTitle("b"),
-      },
+      x: axis("a", { min: a0 - 0.0025 * av, max: a0 + 1.0025 * av }),
+      y: axis("b", { min: b0 - 0.0025 * bv, max: b0 + 1.0025 * bv }),
     },
   }
 
@@ -217,20 +149,20 @@ const ConsistentStrategies = () => {
       ...buildStrategyDatasets(
         data,
         "A-consistent strategies",
-        plotTheme.traceA,
+        colors.traceA,
         showRefinedStrategies
       ),
       ...buildStrategyDatasets(
         data2,
         "B-consistent strategies",
-        plotTheme.traceB,
+        colors.traceB,
         showRefinedStrategies
       ),
       {
         label: "a=b",
         data: toPoints(abline.x, abline.y),
-        borderColor: plotTheme.line,
-        backgroundColor: plotTheme.line,
+        borderColor: colors.line,
+        backgroundColor: colors.line,
         borderWidth: 1,
         borderDash: [6, 4],
         pointRadius: 0,
@@ -243,8 +175,8 @@ const ConsistentStrategies = () => {
       {
         label,
         data: toPoints(x, y),
-        borderColor: plotTheme.line,
-        backgroundColor: plotTheme.line,
+        borderColor: colors.line,
+        backgroundColor: colors.line,
         borderWidth: 2,
         pointRadius: 0,
       },
@@ -263,6 +195,7 @@ const ConsistentStrategies = () => {
             data={strategyChartData}
             options={strategyChartOptions}
             className="plot-main-chart"
+            label="Plot of the A-consistent and B-consistent strategies in the (a, b) plane, with the diagonal a = b"
           />
         </div>
         <div className="plot-controls">
@@ -330,6 +263,7 @@ const ConsistentStrategies = () => {
               min={0.01}
               max={2}
               step={0.01}
+              log1pArrowSteps
               onChange={setA0}
             />
             <SliderControl
@@ -339,6 +273,7 @@ const ConsistentStrategies = () => {
               min={0.1}
               max={10}
               step={0.01}
+              log1pArrowSteps
               onChange={setAv}
             />
             <SliderControl
@@ -348,6 +283,7 @@ const ConsistentStrategies = () => {
               min={0.01}
               max={2}
               step={0.01}
+              log1pArrowSteps
               onChange={setB0}
             />
             <SliderControl
@@ -357,6 +293,7 @@ const ConsistentStrategies = () => {
               min={0.1}
               max={10}
               step={0.01}
+              log1pArrowSteps
               onChange={setBv}
             />
           </div>
@@ -379,6 +316,7 @@ const ConsistentStrategies = () => {
             data={benefitChartData}
             options={smallChartOptions}
             className="small-plot-chart"
+            label="Plot of the benefit function h(α) for α from −1 to 1"
           />
         </div>
         <div className="small-plot">
@@ -391,6 +329,7 @@ const ConsistentStrategies = () => {
             data={costChartData}
             options={smallChartOptions}
             className="small-plot-chart"
+            label="Plot of the cost function C_A(aⁱ) for aⁱ from a₀ to a₀ + a_v"
           />
         </div>
         <div className="small-plot">
@@ -403,6 +342,7 @@ const ConsistentStrategies = () => {
             data={CDFChartData}
             options={smallChartOptions}
             className="small-plot-chart"
+            label="Plot of the cost distribution function F_A(x) for x from 0 to θ_A"
           />
         </div>
       </div>

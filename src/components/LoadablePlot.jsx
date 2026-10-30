@@ -25,10 +25,10 @@ const loadChart = () => {
       )
       const bodyStyle = getComputedStyle(document.body)
       Chart.defaults.font.family = bodyStyle.fontFamily
-      // Legends a bit smaller than the body text
-      Chart.defaults.plugins.legend.labels.font = {
-        size: Math.round(Number.parseFloat(bodyStyle.fontSize) * 0.85),
-      }
+      // All plot text a bit smaller than the body text
+      Chart.defaults.font.size = Math.round(
+        Number.parseFloat(bodyStyle.fontSize) * 0.85
+      )
       return Chart
     }
   )
@@ -117,7 +117,7 @@ const buildOptions = (options, hiddenLabels) => ({
   },
 })
 
-const Plot = ({ data, options, className }) => {
+const Plot = ({ data, options, className, label }) => {
   const canvasRef = useRef(null)
   const chartRef = useRef(null)
   const hiddenLabels = useRef(new Set())
@@ -162,7 +162,12 @@ const Plot = ({ data, options, className }) => {
   // of its container, which would keep the plot from shrinking
   return (
     <div className={className} style={{ position: "relative", minWidth: 0 }}>
-      <canvas ref={canvasRef} style={{ position: "absolute", inset: 0 }} />
+      <canvas
+        ref={canvasRef}
+        role="img"
+        aria-label={label}
+        style={{ position: "absolute", inset: 0 }}
+      />
       {!loaded && (
         <div
           className="loading-placeholder"
