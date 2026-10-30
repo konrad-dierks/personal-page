@@ -4,6 +4,7 @@ import { computeConsistentStrategyData, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
 import usePrefersDark from "./usePrefersDark"
+import SliderControl from "./SliderControl"
 
 const ConsistentStrategies = () => {
   const emptyStrategyData = {
@@ -118,14 +119,6 @@ const ConsistentStrategies = () => {
 
     return () => clearTimeout(timeoutId)
   }, [m, theA, kap, a0, av, b0, bv, theB, rho, k])
-
-  const handleSliderChange = setter => e => {
-    setter(parseFloat(e.target.value))
-  }
-
-  const rangeStyle = (value, min, max) => ({
-    "--range-value": `${((value - min) / (max - min)) * 100}%`,
-  })
 
   useEffect(() => {
     const calculateBenefit = () => {
@@ -275,186 +268,97 @@ const ConsistentStrategies = () => {
         <div className="plot-controls">
           <div>
             <h3>Adjust Parameters: </h3>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="m">
-                  <Latex>$m$</Latex>:
-                </label>
-                <span className="slider-value">{m.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="m"
-                min="0.01"
-                max="100"
-                step="0.01"
-                value={m}
-                style={rangeStyle(m, 0.01, 100)}
-                onChange={handleSliderChange(setM)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="k">
-                  <Latex>$k$</Latex>:
-                </label>
-                <span className="slider-value">{k.toFixed(0)}</span>
-              </div>
-              <input
-                type="range"
-                id="k"
-                min="1"
-                max="10"
-                step="1"
-                value={k}
-                style={rangeStyle(k, 1, 10)}
-                onChange={handleSliderChange(setK)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="kap">
-                  <Latex>$\kappa$</Latex>:
-                </label>
-                <span className="slider-value">{kap.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="kap"
-                min="0.01"
-                max="1"
-                step="0.01"
-                value={kap}
-                style={rangeStyle(kap, 0.01, 1)}
-                onChange={handleSliderChange(setKap)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="rho">
-                  <Latex>$\rho$</Latex>:
-                </label>
-                <span className="slider-value">{rho.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="rho"
-                min="0.01"
-                max="10"
-                step="0.01"
-                value={rho}
-                style={rangeStyle(rho, 0.01, 10)}
-                onChange={handleSliderChange(setRho)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="theA">
-                  <Latex>$\theta_A$</Latex>:
-                </label>
-                <span className="slider-value">{theA.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="theA"
-                min="0.01"
-                max="10"
-                step="0.01"
-                value={theA}
-                style={rangeStyle(theA, 0.01, 10)}
-                onChange={handleSliderChange(setTheA)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="theB">
-                  <Latex>$\theta_B$</Latex>:
-                </label>
-                <span className="slider-value">{theB.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="theB"
-                min="0.01"
-                max="10"
-                step="0.01"
-                value={theB}
-                style={rangeStyle(theB, 0.01, 10)}
-                onChange={handleSliderChange(setTheB)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="a0">
-                  <Latex>$a_0$</Latex>:
-                </label>
-                <span className="slider-value">{a0.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="a0"
-                min="0.01"
-                max="2.0"
-                step="0.01"
-                value={a0}
-                style={rangeStyle(a0, 0.01, 2.0)}
-                onChange={handleSliderChange(setA0)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="av">
-                  <Latex>$a_v$</Latex>:
-                </label>
-                <span className="slider-value">{av.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="av"
-                min="0.1"
-                max="10"
-                step="0.01"
-                value={av}
-                style={rangeStyle(av, 0.1, 10)}
-                onChange={handleSliderChange(setAv)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="b0">
-                  <Latex>$b_0$</Latex>:
-                </label>
-                <span className="slider-value">{b0.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="b0"
-                min="0.01"
-                max="2.0"
-                step="0.01"
-                value={b0}
-                style={rangeStyle(b0, 0.01, 2.0)}
-                onChange={handleSliderChange(setB0)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="bv">
-                  <Latex>$b_v$</Latex>:
-                </label>
-                <span className="slider-value">{bv.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="bv"
-                min="0.1"
-                max="10"
-                step="0.01"
-                value={bv}
-                style={rangeStyle(bv, 0.1, 10)}
-                onChange={handleSliderChange(setBv)}
-              />
-            </div>
+            <SliderControl
+              id="m"
+              label="m"
+              value={m}
+              min={0.01}
+              max={100}
+              step={0.01}
+              log1pArrowSteps
+              onChange={setM}
+            />
+            <SliderControl
+              id="k"
+              label="k"
+              value={k}
+              min={1}
+              max={10}
+              step={1}
+              onChange={setK}
+            />
+            <SliderControl
+              id="kap"
+              label="\kappa"
+              value={kap}
+              min={0.01}
+              max={1}
+              step={0.01}
+              onChange={setKap}
+            />
+            <SliderControl
+              id="rho"
+              label="\rho"
+              value={rho}
+              min={0.01}
+              max={10}
+              step={0.01}
+              onChange={setRho}
+            />
+            <SliderControl
+              id="theA"
+              label="\theta_A"
+              value={theA}
+              min={0.01}
+              max={10}
+              step={0.01}
+              onChange={setTheA}
+            />
+            <SliderControl
+              id="theB"
+              label="\theta_B"
+              value={theB}
+              min={0.01}
+              max={10}
+              step={0.01}
+              onChange={setTheB}
+            />
+            <SliderControl
+              id="a0"
+              label="a_0"
+              value={a0}
+              min={0.01}
+              max={2}
+              step={0.01}
+              onChange={setA0}
+            />
+            <SliderControl
+              id="av"
+              label="a_v"
+              value={av}
+              min={0.1}
+              max={10}
+              step={0.01}
+              onChange={setAv}
+            />
+            <SliderControl
+              id="b0"
+              label="b_0"
+              value={b0}
+              min={0.01}
+              max={2}
+              step={0.01}
+              onChange={setB0}
+            />
+            <SliderControl
+              id="bv"
+              label="b_v"
+              value={bv}
+              min={0.1}
+              max={10}
+              step={0.01}
+              onChange={setBv}
+            />
           </div>
         </div>
       </div>

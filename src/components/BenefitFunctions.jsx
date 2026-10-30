@@ -4,6 +4,7 @@ import { h, h_gamma } from "./Utils.js"
 import Latex from "react-latex-next"
 import "katex/dist/katex.min.css"
 import usePrefersDark from "./usePrefersDark"
+import SliderControl from "./SliderControl"
 
 const ConsistentStrategies = () => {
   const [m, setM] = useState(1)
@@ -29,14 +30,6 @@ const ConsistentStrategies = () => {
     }
     make_h_gamma()
   }, [gamma])
-
-  const handleSliderChange = setter => e => {
-    setter(parseFloat(e.target.value))
-  }
-
-  const rangeStyle = (value, min, max) => ({
-    "--range-value": `${((value - min) / (max - min)) * 100}%`,
-  })
 
   const plotTheme = prefersDark
     ? {
@@ -103,42 +96,25 @@ const ConsistentStrategies = () => {
         <div className="plot-controls">
           <div>
             <h3>Adjust Parameters:</h3>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="m">
-                  <Latex>$m$</Latex>:
-                </label>
-                <span className="slider-value">{m.toFixed(1)}</span>
-              </div>
-              <input
-                type="range"
-                id="m"
-                min="0.01"
-                max="100"
-                step="0.01"
-                value={m}
-                style={rangeStyle(m, 0.01, 100)}
-                onChange={handleSliderChange(setM)}
-              />
-            </div>
-            <div className="slider-control">
-              <div className="slider-label">
-                <label htmlFor="gamma">
-                  <Latex>$\gamma$</Latex>:
-                </label>
-                <span className="slider-value">{gamma.toFixed(2)}</span>
-              </div>
-              <input
-                type="range"
-                id="gamma"
-                min="1.0"
-                max="10.0"
-                step="0.01"
-                value={gamma}
-                style={rangeStyle(gamma, 1.0, 10.0)}
-                onChange={handleSliderChange(setGamma)}
-              />
-            </div>
+            <SliderControl
+              id="m"
+              label="m"
+              value={m}
+              min={0.01}
+              max={100}
+              step={0.01}
+              log1pArrowSteps
+              onChange={setM}
+            />
+            <SliderControl
+              id="gamma"
+              label="\gamma"
+              value={gamma}
+              min={1}
+              max={10}
+              step={0.01}
+              onChange={setGamma}
+            />
           </div>
         </div>
       </div>

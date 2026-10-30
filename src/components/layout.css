@@ -998,7 +998,26 @@ p {
 }
 
 .slider-value {
+  width: calc(6ch + 14px);
+  padding: 0 6px;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
   font-variant-numeric: tabular-nums;
+  appearance: textfield;
+}
+
+.slider-value::-webkit-inner-spin-button,
+.slider-value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.slider-value:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
 }
 
 .home-intro {
