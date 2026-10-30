@@ -48,8 +48,13 @@ const injectResearchLink = root => {
 
 const ownSiteHost = /^(www\.)?konraddierks\.eu$/i
 
+const openInNewTab = link => {
+  link.setAttribute("target", "_blank")
+  link.setAttribute("rel", "noopener noreferrer")
+}
+
 // Links back to this site become root-relative, so the client router handles
-// them; links to other sites open in a new tab
+// them; links to other sites and to PDFs open in a new tab
 const fixLinks = root => {
   root.querySelectorAll("a").forEach(link => {
     const href = link.getAttribute("href") ?? ""
@@ -64,9 +69,11 @@ const fixLinks = root => {
     }
     if (ownSiteHost.test(url.hostname)) {
       link.setAttribute("href", `${url.pathname}${url.search}${url.hash}`)
+      if (/\.pdf$/i.test(url.pathname)) {
+        openInNewTab(link)
+      }
     } else {
-      link.setAttribute("target", "_blank")
-      link.setAttribute("rel", "noopener noreferrer")
+      openInNewTab(link)
     }
   })
 }
