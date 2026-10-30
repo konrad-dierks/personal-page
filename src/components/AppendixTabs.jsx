@@ -2,13 +2,15 @@ import * as React from "react"
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs"
 import { GithubIcon } from "@sanity/icons"
 import "react-tabs/style/react-tabs.css"
-import ConsistentStrategies from "./ConsistentStrategies"
-import BenefitFunctions from "./BenefitFunctions"
 import {
   TurnoutPaperAbstract,
   TurnoutPaperFunding,
   TurnoutPaperPresentations,
 } from "./papers.jsx"
+
+// The plot tabs pull in KaTeX, so they are only loaded when first opened
+const ConsistentStrategies = React.lazy(() => import("./ConsistentStrategies"))
+const BenefitFunctions = React.lazy(() => import("./BenefitFunctions"))
 
 const tabHashes = ["overview", "tab1", "tab2"]
 const hashToIndex = hash => {
@@ -153,10 +155,18 @@ const AppendixTabs = ({ defaultTab = 0 }) => {
         </div>
       </TabPanel>
       <TabPanel>
-        <ConsistentStrategies />
+        <React.Suspense
+          fallback={<p className="loading-placeholder">Loading…</p>}
+        >
+          <ConsistentStrategies />
+        </React.Suspense>
       </TabPanel>
       <TabPanel>
-        <BenefitFunctions />
+        <React.Suspense
+          fallback={<p className="loading-placeholder">Loading…</p>}
+        >
+          <BenefitFunctions />
+        </React.Suspense>
       </TabPanel>
     </Tabs>
   )

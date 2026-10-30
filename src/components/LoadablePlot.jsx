@@ -30,7 +30,13 @@ const Plot = props => {
     }
   }, [])
 
-  return PlotComponent ? <PlotComponent {...props} /> : null
+  return PlotComponent ? (
+    <PlotComponent {...props} />
+  ) : (
+    <div className="loading-placeholder" style={props.style}>
+      Loading plot…
+    </div>
+  )
 }
 
 export default Plot

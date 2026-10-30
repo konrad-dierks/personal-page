@@ -224,27 +224,24 @@ const ConsistentStrategies = () => {
     padding: "0px",
   }
 
+  // Side by side on wide screens, stacked on narrow ones
   const threePlots = {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: isHorizontal ? "row" : "column",
     width: "100%",
-    height: isHorizontal ? "calc(var(--size-content) * 0.35)" : "35vw",
-    padding: "0px",
-  }
-
-  const plotTitles = {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    height: "100%",
     padding: "0px",
   }
 
   const thirdStyle = {
     display: "flex",
     flexDirection: "column",
-    width: "33%",
-    height: "100%",
+    width: isHorizontal ? "33%" : "100%",
+    padding: "0px",
+  }
+
+  const smallPlotStyle = {
+    width: "100%",
+    height: isHorizontal ? "calc(var(--size-content) * 0.35)" : "70vw",
     padding: "0px",
   }
 
@@ -262,7 +259,8 @@ const ConsistentStrategies = () => {
     alignItems: "center",
     flexDirection: "column",
     width: "100%",
-    height: "100%",
+    // Fills the spare height so the plots line up even if a title wraps
+    flexGrow: 1,
     padding: "0px",
   }
 
@@ -621,65 +619,51 @@ const ConsistentStrategies = () => {
           <Latex>{`We plot $A$-consistent and $B$-consistent strategies for a range of parameters. The cost is described by the cumulative distribution functions \\[ F_A(x) = \\left(\\frac{x}{\\theta_A}\\right)^{1/k}\\quad \\text{ and }\\quad  F_B(x) = \\left(\\frac{x}{\\theta_B}\\right)^{1/k}. \\] Especially, for $k =1$, the cost is uniformly distributed on $[0, \\theta_A]$ and $[0,\\theta_B]$, respectively.`}</Latex>
         </p>
       </div>
-      <div style={plotTitles}>
-        <div style={plotTitle}>
-          <h3>
-            Benefit Function <Latex>$h(\alpha)$</Latex>
-          </h3>
-        </div>
-        <div style={plotTitle}>
-          <h3>
-            Cost function <Latex>$C_A(a^i)$</Latex>{" "}
-          </h3>
-        </div>
-        <div style={plotTitle}>
-          <h3>
-            CDF <Latex>$F_A(x)$</Latex>
-          </h3>
-        </div>
-      </div>
       <div style={threePlots}>
-        <div
-          style={thirdStyle}
-          min-width="0"
-          min-height="0"
-          max-width="100%"
-          max-height="100%"
-        >
-          <Plot
-            data={benefitTrace}
-            layout={plotlyLayout}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
-          />
+        <div style={thirdStyle}>
+          <div style={plotTitle}>
+            <h3>
+              Benefit Function <Latex>$h(\alpha)$</Latex>
+            </h3>
+          </div>
+          <div style={smallPlotStyle}>
+            <Plot
+              data={benefitTrace}
+              layout={plotlyLayout}
+              useResizeHandler={true}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
         </div>
-        <div
-          style={thirdStyle}
-          min-width="0"
-          min-height="0"
-          max-width="100%"
-          max-height="100%"
-        >
-          <Plot
-            data={costTrace}
-            layout={plotlyLayout}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
-          />
+        <div style={thirdStyle}>
+          <div style={plotTitle}>
+            <h3>
+              Cost function <Latex>$C_A(a^i)$</Latex>
+            </h3>
+          </div>
+          <div style={smallPlotStyle}>
+            <Plot
+              data={costTrace}
+              layout={plotlyLayout}
+              useResizeHandler={true}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
         </div>
-        <div
-          style={thirdStyle}
-          min-width="0"
-          min-height="0"
-          max-width="100%"
-          max-height="100%"
-        >
-          <Plot
-            data={CDFTrace}
-            layout={plotlyLayout}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
-          />
+        <div style={thirdStyle}>
+          <div style={plotTitle}>
+            <h3>
+              CDF <Latex>$F_A(x)$</Latex>
+            </h3>
+          </div>
+          <div style={smallPlotStyle}>
+            <Plot
+              data={CDFTrace}
+              layout={plotlyLayout}
+              useResizeHandler={true}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
         </div>
       </div>
     </div>

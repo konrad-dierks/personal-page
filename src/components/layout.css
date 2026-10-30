@@ -909,6 +909,14 @@ p {
   background: var(--slider-thumb-bg-hover, var(--slider-thumb-bg));
 }
 
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
 .slider-control {
   display: flex;
   flex-direction: column;
