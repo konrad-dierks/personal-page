@@ -8,11 +8,6 @@ import usePrefersDark from "./usePrefersDark"
 const ConsistentStrategies = () => {
   const [m, setM] = useState(1)
   const [gamma, setGamma] = useState(1)
-  const [isHorizontal, setIsHorizontal] = useState(
-    typeof window === "undefined"
-      ? true
-      : window.innerWidth > window.innerHeight
-  )
   const [mData, setmData] = useState({ x: [], y: [] })
   const [gammaData, setGammaData] = useState({ x: [], y: [] })
   const prefersDark = usePrefersDark()
@@ -42,53 +37,6 @@ const ConsistentStrategies = () => {
   const rangeStyle = (value, min, max) => ({
     "--range-value": `${((value - min) / (max - min)) * 100}%`,
   })
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === "undefined") {
-        setIsHorizontal(true)
-      } else {
-        setIsHorizontal(window.innerWidth > window.innerHeight)
-      }
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
-  const verticalContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    width: "100%",
-    padding: "0px",
-  }
-  const containerStyle = {
-    display: "flex",
-    flexDirection: isHorizontal ? "row" : "column",
-    height: "100%",
-    width: "100%",
-    padding: "0px",
-  }
-
-  const plotStyle = {
-    display: "flex",
-    flexDirection: "row",
-    width: isHorizontal ? "70%" : "100%",
-    minWidth: 0,
-    padding: "0px",
-  }
-
-  const controlsStyle = {
-    display: "flex",
-    flexDirection: "column",
-    width: isHorizontal ? "30%" : "100%",
-    height: isHorizontal ? "100%" : "auto",
-    padding: "0px",
-    boxSizing: "border-box",
-  }
 
   const plotTheme = prefersDark
     ? {
@@ -143,16 +91,16 @@ const ConsistentStrategies = () => {
   }
 
   return (
-    <div style={verticalContainerStyle}>
-      <div style={containerStyle}>
-        <div style={plotStyle}>
+    <div className="plot-page">
+      <div className="plot-layout">
+        <div className="plot-main">
           <Plot
             data={chartData}
             options={chartOptions}
-            style={{ width: "100%", height: "100%", minHeight: "450px" }}
+            className="plot-main-chart"
           />
         </div>
-        <div style={controlsStyle}>
+        <div className="plot-controls">
           <div>
             <h3>Adjust Parameters:</h3>
             <div className="slider-control">

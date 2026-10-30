@@ -63,11 +63,6 @@ const ConsistentStrategies = () => {
   const [data2, setData2] = useState(emptyStrategyData)
   const [showRefinedStrategies, setShowRefinedStrategies] = useState(false)
   const [abline, setAbline] = useState({ x: [], y: [] })
-  const [isHorizontal, setIsHorizontal] = useState(
-    typeof window === "undefined"
-      ? true
-      : window.innerWidth > window.innerHeight
-  )
   const [benefit, setBenefit] = useState({ x: [], y: [] })
   const [cost, setCost] = useState({ x: [], y: [] })
   const [CDF, setCDF] = useState({ x: [], y: [] })
@@ -164,87 +159,6 @@ const ConsistentStrategies = () => {
     }
     calculateCostCDF()
   }, [theA, k])
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === "undefined") {
-        setIsHorizontal(true)
-      } else {
-        setIsHorizontal(window.innerWidth > window.innerHeight)
-      }
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
-
-  const containerStyle = {
-    display: "flex",
-    flexDirection: isHorizontal ? "row" : "column",
-    height: "100%",
-    width: "100%",
-    padding: "0px",
-  }
-
-  const verticalStyle = {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    height: "100%",
-    padding: "0px",
-  }
-
-  // Side by side on wide screens, stacked on narrow ones
-  const threePlots = {
-    display: "flex",
-    flexDirection: isHorizontal ? "row" : "column",
-    width: "100%",
-    padding: "0px",
-  }
-
-  const thirdStyle = {
-    display: "flex",
-    flexDirection: "column",
-    width: isHorizontal ? "33%" : "100%",
-    minWidth: 0,
-    padding: "0px",
-  }
-
-  const smallPlotStyle = {
-    width: "100%",
-    height: isHorizontal ? "calc(var(--size-content) * 0.35)" : "70vw",
-    padding: "0px",
-  }
-
-  const plotStyle = {
-    display: "flex",
-    flexDirection: "row",
-    width: isHorizontal ? "70%" : "100%",
-    minWidth: 0,
-    padding: "0px",
-  }
-
-  const plotTitle = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    width: "100%",
-    // Fills the spare height so the plots line up even if a title wraps
-    flexGrow: 1,
-    padding: "0px",
-  }
-
-  const controlsStyle = {
-    display: "flex",
-    flexDirection: "column",
-    width: isHorizontal ? "30%" : "100%",
-    height: isHorizontal ? "100%" : "auto",
-    padding: "0px",
-    boxSizing: "border-box",
-  }
 
   const plotTheme = prefersDark
     ? {
@@ -349,16 +263,16 @@ const ConsistentStrategies = () => {
   const CDFChartData = singleLineData("CDF", CDF)
 
   return (
-    <div style={verticalStyle}>
-      <div style={containerStyle}>
-        <div style={plotStyle}>
+    <div className="plot-page">
+      <div className="plot-layout">
+        <div className="plot-main">
           <Plot
             data={strategyChartData}
             options={strategyChartOptions}
-            style={{ width: "100%", height: "100%", minHeight: "450px" }}
+            className="plot-main-chart"
           />
         </div>
-        <div style={controlsStyle}>
+        <div className="plot-controls">
           <div>
             <h3>Adjust Parameters: </h3>
             <div className="slider-control">
@@ -550,48 +464,42 @@ const ConsistentStrategies = () => {
           <Latex>{`We plot $A$-consistent and $B$-consistent strategies for a range of parameters. The cost is described by the cumulative distribution functions \\[ F_A(x) = \\left(\\frac{x}{\\theta_A}\\right)^{1/k}\\quad \\text{ and }\\quad  F_B(x) = \\left(\\frac{x}{\\theta_B}\\right)^{1/k}. \\] Especially, for $k =1$, the cost is uniformly distributed on $[0, \\theta_A]$ and $[0,\\theta_B]$, respectively.`}</Latex>
         </p>
       </div>
-      <div style={threePlots}>
-        <div style={thirdStyle}>
-          <div style={plotTitle}>
+      <div className="small-plots">
+        <div className="small-plot">
+          <div className="small-plot-title">
             <h3>
               Benefit Function <Latex>$h(\alpha)$</Latex>
             </h3>
           </div>
-          <div style={smallPlotStyle}>
-            <Plot
-              data={benefitChartData}
-              options={smallChartOptions}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
+          <Plot
+            data={benefitChartData}
+            options={smallChartOptions}
+            className="small-plot-chart"
+          />
         </div>
-        <div style={thirdStyle}>
-          <div style={plotTitle}>
+        <div className="small-plot">
+          <div className="small-plot-title">
             <h3>
               Cost function <Latex>$C_A(a^i)$</Latex>
             </h3>
           </div>
-          <div style={smallPlotStyle}>
-            <Plot
-              data={costChartData}
-              options={smallChartOptions}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
+          <Plot
+            data={costChartData}
+            options={smallChartOptions}
+            className="small-plot-chart"
+          />
         </div>
-        <div style={thirdStyle}>
-          <div style={plotTitle}>
+        <div className="small-plot">
+          <div className="small-plot-title">
             <h3>
               CDF <Latex>$F_A(x)$</Latex>
             </h3>
           </div>
-          <div style={smallPlotStyle}>
-            <Plot
-              data={CDFChartData}
-              options={smallChartOptions}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
+          <Plot
+            data={CDFChartData}
+            options={smallChartOptions}
+            className="small-plot-chart"
+          />
         </div>
       </div>
     </div>

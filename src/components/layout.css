@@ -917,6 +917,73 @@ p {
   font-style: italic;
 }
 
+/* Interactive plots: stacked by default, side by side when the content column
+   is at least 80% of its maximum width, that is of --size-content minus both
+   --size-gutter (custom properties cannot be used in container queries) */
+.appendix-tabs {
+  container-type: inline-size;
+}
+
+.plot-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.plot-layout,
+.small-plots {
+  display: flex;
+  flex-direction: column;
+}
+
+.plot-main,
+.small-plot {
+  min-width: 0;
+}
+
+.plot-main-chart {
+  height: 100%;
+  min-height: 450px;
+}
+
+.small-plot {
+  display: flex;
+  flex-direction: column;
+}
+
+.small-plot-title {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.small-plot-chart {
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 24rem;
+  margin-inline: auto;
+}
+
+@container (width >= calc(0.8 * (52rem - 64px))) {
+  .plot-layout,
+  .small-plots {
+    flex-direction: row;
+  }
+
+  .plot-main {
+    width: 70%;
+  }
+
+  .plot-controls {
+    width: 30%;
+  }
+
+  .small-plot {
+    flex: 1 1 0;
+  }
+}
+
 .slider-control {
   display: flex;
   flex-direction: column;

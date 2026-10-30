@@ -23,7 +23,12 @@ const loadChart = () => {
         Legend,
         Tooltip
       )
-      Chart.defaults.font.family = getComputedStyle(document.body).fontFamily
+      const bodyStyle = getComputedStyle(document.body)
+      Chart.defaults.font.family = bodyStyle.fontFamily
+      // Legends a bit smaller than the body text
+      Chart.defaults.plugins.legend.labels.font = {
+        size: Math.round(Number.parseFloat(bodyStyle.fontSize) * 0.85),
+      }
       return Chart
     }
   )
@@ -112,7 +117,7 @@ const buildOptions = (options, hiddenLabels) => ({
   },
 })
 
-const Plot = ({ data, options, style }) => {
+const Plot = ({ data, options, className }) => {
   const canvasRef = useRef(null)
   const chartRef = useRef(null)
   const hiddenLabels = useRef(new Set())
@@ -156,7 +161,7 @@ const Plot = ({ data, options, style }) => {
   // The canvas is taken out of the flow so that it never props up the size
   // of its container, which would keep the plot from shrinking
   return (
-    <div style={{ ...style, position: "relative", minWidth: 0 }}>
+    <div className={className} style={{ position: "relative", minWidth: 0 }}>
       <canvas ref={canvasRef} style={{ position: "absolute", inset: 0 }} />
       {!loaded && (
         <div

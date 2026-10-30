@@ -172,6 +172,10 @@ const researchPages = [
 
 <script>
   const NAV_FIT_EPSILON = 1
+  // Below this share of its maximum width, the content column counts as
+  // narrow: the menu button replaces the links and the bar hides on scroll.
+  // Matches the container query for the interactive plots in layout.css.
+  const NARROW_CONTENT_SHARE = 0.8
   const SIDE_NAV_ENTER_BUFFER_PX = 8
   const SIDE_NAV_EXIT_BUFFER_PX = 8
   const THEME_KEY = "theme-override"
@@ -180,7 +184,7 @@ const researchPages = [
   const state = {
     useSideNav: false,
     isHorizontal: true,
-    isPortrait: window.innerHeight > window.innerWidth,
+    isNarrow: false,
     isAtTop: true,
     menuOpen: false,
     researchOpen: false,
@@ -257,11 +261,11 @@ const researchPages = [
     if (!bar) {
       return
     }
-    const { useSideNav, isHorizontal, isPortrait, isAtTop } = state
+    const { useSideNav, isHorizontal, isNarrow, isAtTop } = state
 
     $("[data-side-nav]").hidden = !useSideNav
     bar.hidden = useSideNav
-    bar.classList.toggle("site-nav-bar--hidden", isPortrait && !isAtTop)
+    bar.classList.toggle("site-nav-bar--hidden", isNarrow && !isAtTop)
     bar.classList.toggle("site-nav-bar--horizontal", isHorizontal)
     bar.classList.toggle("site-nav-bar--vertical", !isHorizontal)
     $("[data-nav-horizontal]").hidden = !isHorizontal
@@ -301,8 +305,6 @@ const researchPages = [
       return
     }
 
-    const isLandscape = window.innerWidth > window.innerHeight
-    const isPortrait = !isLandscape
     const root = document.documentElement
     const rootStyle = window.getComputedStyle(root)
     const shellStyle = window.getComputedStyle(shell)
@@ -319,15 +321,13 @@ const researchPages = [
     const sideNavEnterThreshold =
       sideNavBaseThreshold + SIDE_NAV_ENTER_BUFFER_PX
     const sideNavExitThreshold = sideNavBaseThreshold - SIDE_NAV_EXIT_BUFFER_PX
-    const canUseSideNav =
-      isLandscape &&
-      (state.useSideNav
-        ? remainingWidth >= sideNavExitThreshold
-        : remainingWidth >= sideNavEnterThreshold)
+    const canUseSideNav = state.useSideNav
+      ? remainingWidth >= sideNavExitThreshold
+      : remainingWidth >= sideNavEnterThreshold
 
     if (canUseSideNav) {
       setState({
-        isPortrait,
+        isNarrow: false,
         useSideNav: true,
         isHorizontal: true,
         menuOpen: false,
@@ -335,13 +335,21 @@ const researchPages = [
       return
     }
 
+    // The shell's padding is still that of the previous mode here, so the
+    // gutter is read from the custom property instead
+    const gutter = Number.parseFloat(
+      rootStyle.getPropertyValue("--size-gutter")
+    )
+    const availableWidth = Math.min(root.clientWidth - 2 * gutter, contentWidth)
+    const isNarrow = availableWidth < NARROW_CONTENT_SHARE * contentWidth
+
     const leavingSideNav = state.useSideNav
     setState({
-      isPortrait,
+      isNarrow,
       useSideNav: false,
-      isHorizontal: isPortrait ? false : state.isHorizontal,
+      isHorizontal: isNarrow ? false : state.isHorizontal,
     })
-    if (isPortrait) {
+    if (isNarrow) {
       return
     }
 
@@ -369,7 +377,7 @@ const researchPages = [
   const handleScroll = () => {
     const atTop = window.scrollY <= 4
     setState({ isAtTop: atTop })
-    if (state.isPortrait && !atTop) {
+    if (state.isNarrow && !atTop) {
       closeMenus()
     }
   }
