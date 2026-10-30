@@ -1,4 +1,4 @@
-import Plot from "./LoadablePlot"
+import Plot, { toPoints } from "./LoadablePlot"
 import React, { useState, useEffect } from "react"
 import { h, h_gamma } from "./Utils.js"
 import Latex from "react-latex-next"
@@ -77,7 +77,7 @@ const ConsistentStrategies = () => {
     display: "flex",
     flexDirection: "row",
     width: isHorizontal ? "70%" : "100%",
-    height: isHorizontal ? "100%" : "70%",
+    minWidth: 0,
     padding: "0px",
   }
 
@@ -92,7 +92,6 @@ const ConsistentStrategies = () => {
 
   const plotTheme = prefersDark
     ? {
-        background: "#0f1113",
         text: "#f2f2f2",
         axisLine: "rgba(255, 255, 255, 0.35)",
         grid: "rgba(255, 255, 255, 0.12)",
@@ -100,7 +99,6 @@ const ConsistentStrategies = () => {
         traceB: "#7fd6c6",
       }
     : {
-        background: "#ffffff",
         text: "#333333",
         axisLine: "rgba(0, 0, 0, 0.25)",
         grid: "rgba(0, 0, 0, 0.12)",
@@ -108,71 +106,50 @@ const ConsistentStrategies = () => {
         traceB: "#2e8f7a",
       }
 
-  const axisBase = {
-    automargin: true,
-    tickfont: { color: plotTheme.text },
-    linecolor: plotTheme.axisLine,
-    gridcolor: plotTheme.grid,
-    zerolinecolor: plotTheme.axisLine,
-    title: {
-      font: {
-        size: 12,
-        color: plotTheme.text,
-      },
+  const axisOptions = {
+    ticks: { color: plotTheme.text },
+    border: { color: plotTheme.axisLine },
+    grid: {
+      color: context =>
+        context.tick?.value === 0 ? plotTheme.axisLine : plotTheme.grid,
     },
   }
 
-  const plotlyLayout = {
-    margin: { t: 10, r: 10, b: 20, l: 30 },
-    legend: isHorizontal
-      ? { x: 1, y: 1, xanchor: "left", font: { color: plotTheme.text } }
-      : {
-          x: 1,
-          xanchor: "right",
-          y: 1,
-          font: { color: plotTheme.text },
-        },
-    paper_bgcolor: plotTheme.background,
-    plot_bgcolor: plotTheme.background,
-    font: { color: plotTheme.text },
-    xaxis: axisBase,
-    yaxis: axisBase,
+  const chartOptions = {
+    plugins: {
+      legend: { position: "top", labels: { color: plotTheme.text } },
+    },
+    scales: { x: axisOptions, y: axisOptions },
   }
 
-  const traces = [
-    {
-      x: mData.x,
-      y: mData.y,
-      type: "scatter",
-      name: "h₁(x,m)",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.traceA },
-    },
-    {
-      x: gammaData.x,
-      y: gammaData.y,
-      type: "scatter",
-      name: "h₂(x,γ)",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.traceB },
-    },
-  ]
+  const lineDataset = (label, points, color) => ({
+    label,
+    data: points,
+    borderColor: color,
+    backgroundColor: color,
+    borderWidth: 2,
+    pointRadius: 0,
+  })
+
+  const chartData = {
+    datasets: [
+      lineDataset("h₁(x,m)", toPoints(mData.x, mData.y), plotTheme.traceA),
+      lineDataset(
+        "h₂(x,γ)",
+        toPoints(gammaData.x, gammaData.y),
+        plotTheme.traceB
+      ),
+    ],
+  }
 
   return (
     <div style={verticalContainerStyle}>
       <div style={containerStyle}>
-        <div
-          style={plotStyle}
-          min-width="0"
-          min-height="0"
-          max-width="100%"
-          max-height="100%"
-        >
+        <div style={plotStyle}>
           <Plot
-            data={traces}
-            layout={plotlyLayout}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
+            data={chartData}
+            options={chartOptions}
+            style={{ width: "100%", height: "100%", minHeight: "450px" }}
           />
         </div>
         <div style={controlsStyle}>

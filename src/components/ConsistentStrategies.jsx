@@ -1,4 +1,4 @@
-import Plot from "./LoadablePlot"
+import Plot, { toPoints } from "./LoadablePlot"
 import React, { useState, useEffect } from "react"
 import { computeConsistentStrategyData, h, CostFun } from "./Utils.js"
 import Latex from "react-latex-next"
@@ -13,68 +13,40 @@ const ConsistentStrategies = () => {
     lines: [],
   }
 
-  const buildStrategyTraces = (
-    plotData,
-    name,
-    color,
-    legendGroup,
-    useLineRendering
-  ) => {
-    const traces = [
-      {
-        x: [null],
-        y: [null],
-        type: "scatter",
-        name,
-        mode: "lines",
-        line: { color, width: 2 },
-        showlegend: true,
-        legendgroup: legendGroup,
-        hoverinfo: "skip",
-      },
-    ]
-
-    if (!useLineRendering) {
-      traces.push({
-        x: plotData.x,
-        y: plotData.y,
-        type: "scatter",
-        name,
-        mode: "markers",
-        marker: { size: 4, color },
-        showlegend: false,
-        legendgroup: legendGroup,
-      })
-      return traces
-    }
-
-    plotData.lines.forEach(line => {
-      traces.push({
-        x: line.x,
-        y: line.y,
-        type: "scatter",
-        name,
-        mode: "lines",
-        line: { color, width: 2 },
-        showlegend: false,
-        legendgroup: legendGroup,
-      })
+  // All datasets of one kind share a label, so they form one legend entry
+  const buildStrategyDatasets = (plotData, label, color, useLineRendering) => {
+    const markers = (points, radius) => ({
+      label,
+      data: points,
+      showLine: false,
+      backgroundColor: color,
+      borderColor: color,
+      pointRadius: radius,
+      pointBorderWidth: 0,
+      // Only drawn as the legend line
+      borderWidth: 2,
     })
 
-    if (plotData.scatter.x.length > 0) {
-      traces.push({
-        x: plotData.scatter.x,
-        y: plotData.scatter.y,
-        type: "scatter",
-        name,
-        mode: "markers",
-        marker: { size: 2, color },
-        showlegend: false,
-        legendgroup: legendGroup,
-      })
+    if (!useLineRendering) {
+      return [markers(toPoints(plotData.x, plotData.y), 2)]
     }
 
-    return traces
+    const datasets = plotData.lines.map(line => ({
+      label,
+      data: toPoints(line.x, line.y),
+      borderColor: color,
+      backgroundColor: color,
+      borderWidth: 2,
+      pointRadius: 0,
+    }))
+
+    if (plotData.scatter.x.length > 0) {
+      datasets.push(
+        markers(toPoints(plotData.scatter.x, plotData.scatter.y), 1)
+      )
+    }
+
+    return datasets
   }
 
   const [m, setM] = useState(1)
@@ -236,6 +208,7 @@ const ConsistentStrategies = () => {
     display: "flex",
     flexDirection: "column",
     width: isHorizontal ? "33%" : "100%",
+    minWidth: 0,
     padding: "0px",
   }
 
@@ -249,7 +222,7 @@ const ConsistentStrategies = () => {
     display: "flex",
     flexDirection: "row",
     width: isHorizontal ? "70%" : "100%",
-    height: isHorizontal ? "100%" : "70%",
+    minWidth: 0,
     padding: "0px",
   }
 
@@ -275,156 +248,114 @@ const ConsistentStrategies = () => {
 
   const plotTheme = prefersDark
     ? {
-        background: "#0f1113",
         text: "#f2f2f2",
         axisLine: "rgba(255, 255, 255, 0.35)",
         grid: "rgba(255, 255, 255, 0.12)",
         traceA: "#c77dff",
         traceB: "#7fd6c6",
-        raw: "rgba(255, 255, 255, 0.18)",
         line: "#f2f2f2",
       }
     : {
-        background: "#ffffff",
         text: "#333333",
         axisLine: "rgba(0, 0, 0, 0.25)",
         grid: "rgba(0, 0, 0, 0.12)",
         traceA: "#440154",
         traceB: "#2e8f7a",
-        raw: "rgba(0, 0, 0, 0.12)",
         line: "#000000",
       }
 
-  const axisBase = {
-    automargin: true,
-    tickfont: { color: plotTheme.text },
-    linecolor: plotTheme.axisLine,
-    gridcolor: plotTheme.grid,
-    zerolinecolor: plotTheme.axisLine,
-    title: {
-      font: {
-        size: 12,
-        color: plotTheme.text,
+  const axisOptions = {
+    ticks: { color: plotTheme.text },
+    border: { color: plotTheme.axisLine },
+    grid: {
+      color: context =>
+        context.tick?.value === 0 ? plotTheme.axisLine : plotTheme.grid,
+    },
+  }
+
+  const axisTitle = text => ({
+    display: true,
+    text,
+    color: plotTheme.text,
+    font: { size: 12 },
+  })
+
+  const smallChartOptions = {
+    plugins: { legend: { display: false } },
+    scales: { x: axisOptions, y: axisOptions },
+  }
+
+  const strategyChartOptions = {
+    plugins: {
+      legend: { position: "top", labels: { color: plotTheme.text } },
+    },
+    scales: {
+      x: {
+        ...axisOptions,
+        min: a0 - 0.0025 * av,
+        max: a0 + 1.0025 * av,
+        title: axisTitle("a"),
+      },
+      y: {
+        ...axisOptions,
+        min: b0 - 0.0025 * bv,
+        max: b0 + 1.0025 * bv,
+        title: axisTitle("b"),
       },
     },
   }
 
-  const plotlyLayout = {
-    margin: { t: 10, r: 10, b: 20, l: 20 },
-    paper_bgcolor: plotTheme.background,
-    plot_bgcolor: plotTheme.background,
-    font: { color: plotTheme.text },
-    xaxis: axisBase,
-    yaxis: axisBase,
+  const strategyChartData = {
+    datasets: [
+      ...buildStrategyDatasets(
+        data,
+        "A-consistent strategies",
+        plotTheme.traceA,
+        showRefinedStrategies
+      ),
+      ...buildStrategyDatasets(
+        data2,
+        "B-consistent strategies",
+        plotTheme.traceB,
+        showRefinedStrategies
+      ),
+      {
+        label: "a=b",
+        data: toPoints(abline.x, abline.y),
+        borderColor: plotTheme.line,
+        backgroundColor: plotTheme.line,
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+      },
+    ],
   }
 
-  const plotlyLayout2 = {
-    legend: isHorizontal
-      ? { x: 1, y: 1, xanchor: "left", font: { color: plotTheme.text } }
-      : {
-          x: 1,
-          xanchor: "right",
-          y: 1,
-          font: { color: plotTheme.text },
-        },
-    xaxis: {
-      ...axisBase,
-      range: [a0 - 0.0025 * av, a0 + 1.0025 * av],
-      title: {
-        ...axisBase.title,
-        text: "a",
+  const singleLineData = (label, { x, y }) => ({
+    datasets: [
+      {
+        label,
+        data: toPoints(x, y),
+        borderColor: plotTheme.line,
+        backgroundColor: plotTheme.line,
+        borderWidth: 2,
+        pointRadius: 0,
       },
-    },
-    yaxis: {
-      ...axisBase,
-      range: [b0 - 0.0025 * bv, b0 + 1.0025 * bv],
-      title: {
-        ...axisBase.title,
-        text: "b",
-      },
-    },
-    margin: { t: 10, r: 10, b: 20, l: 20 },
-    paper_bgcolor: plotTheme.background,
-    plot_bgcolor: plotTheme.background,
-    font: { color: plotTheme.text },
-  }
+    ],
+  })
 
-  const traces = [
-    ...buildStrategyTraces(
-      data,
-      "A-consistent strategies",
-      plotTheme.traceA,
-      "Polynomial",
-      showRefinedStrategies
-    ),
-    ...buildStrategyTraces(
-      data2,
-      "B-consistent strategies",
-      plotTheme.traceB,
-      "Polynomial 2",
-      showRefinedStrategies
-    ),
-    {
-      x: abline.x,
-      y: abline.y,
-      type: "scatter",
-      name: "a=b",
-      mode: "lines",
-      line: { color: plotTheme.line, dash: "dash", width: 1 },
-    },
-  ]
-
-  const benefitTrace = [
-    {
-      x: benefit.x,
-      y: benefit.y,
-      type: "scatter",
-      name: "Benefit function",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.line },
-      showlegend: false,
-    },
-  ]
-
-  const costTrace = [
-    {
-      x: cost.x,
-      y: cost.y,
-      type: "scatter",
-      name: "Cost function",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.line },
-      showlegend: false,
-    },
-  ]
-
-  const CDFTrace = [
-    {
-      x: CDF.x,
-      y: CDF.y,
-      type: "scatter",
-      name: "CDF",
-      mode: "lines",
-      marker: { size: 1, color: plotTheme.line },
-      showlegend: false,
-    },
-  ]
+  const benefitChartData = singleLineData("Benefit function", benefit)
+  const costChartData = singleLineData("Cost function", cost)
+  const CDFChartData = singleLineData("CDF", CDF)
 
   return (
     <div style={verticalStyle}>
       <div style={containerStyle}>
-        <div
-          style={plotStyle}
-          min-width="0"
-          min-height="0"
-          max-width="100%"
-          max-height="100%"
-        >
+        <div style={plotStyle}>
           <Plot
-            data={traces}
-            layout={plotlyLayout2}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%" }}
+            data={strategyChartData}
+            options={strategyChartOptions}
+            style={{ width: "100%", height: "100%", minHeight: "450px" }}
           />
         </div>
         <div style={controlsStyle}>
@@ -628,9 +559,8 @@ const ConsistentStrategies = () => {
           </div>
           <div style={smallPlotStyle}>
             <Plot
-              data={benefitTrace}
-              layout={plotlyLayout}
-              useResizeHandler={true}
+              data={benefitChartData}
+              options={smallChartOptions}
               style={{ width: "100%", height: "100%" }}
             />
           </div>
@@ -643,9 +573,8 @@ const ConsistentStrategies = () => {
           </div>
           <div style={smallPlotStyle}>
             <Plot
-              data={costTrace}
-              layout={plotlyLayout}
-              useResizeHandler={true}
+              data={costChartData}
+              options={smallChartOptions}
               style={{ width: "100%", height: "100%" }}
             />
           </div>
@@ -658,9 +587,8 @@ const ConsistentStrategies = () => {
           </div>
           <div style={smallPlotStyle}>
             <Plot
-              data={CDFTrace}
-              layout={plotlyLayout}
-              useResizeHandler={true}
+              data={CDFChartData}
+              options={smallChartOptions}
               style={{ width: "100%", height: "100%" }}
             />
           </div>
